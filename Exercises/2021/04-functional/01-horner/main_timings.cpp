@@ -11,6 +11,19 @@
 #include <vector>
 
 int main(int argc, char **argv) {
+  if (argc != 3)
+    {
+      std::cout << "missing input characterization" << std::endl;
+      return 1;
+    }
+  std::string mode = argv[1];
+  std::string method = argv[2];
+  if ((mode != "parallel" && mode != "sequential") ||
+      (method != "Horner" && method != "Standard"))
+    {
+      std::cout << "wrong input" << std::endl;
+      return 1;
+    }
   unsigned int degree;
   std::cout << "Polynomial degree" << std::endl;
   std::cout << "=> ";
@@ -46,18 +59,21 @@ int main(int argc, char **argv) {
   Timings::Chrono timer;
 
   std::cout << "Computing " << n_points << " evaluation of polynomial"
-            << " with standard formula" << std::endl;
+            << " with " << method << " " << mode << " formula" << std::endl;
   timer.start();
-  evaluate_poly(points, coeff, &eval);
+  evaluate_poly(points, coeff, method, mode);
   std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;
 
-  std::cout << "Computing " << n_points << " evaluation of the polynomial with"
-            << " Horner's rule" << std::endl;
+  /*
+  std::cout << "Computing " << n_points << " evaluation of the polynomial "
+            << "with Horner's rule" << std::endl;
   timer.start();
-  evaluate_poly(points, coeff, &eval_horner);
+  evaluate_poly(points, coeff, "Horner");
   std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;
+  */
+  return 0;
 }
