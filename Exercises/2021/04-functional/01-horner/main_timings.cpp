@@ -11,17 +11,15 @@
 #include <vector>
 
 int main(int argc, char **argv) {
-  if (argc != 3)
+  if (argc != 2)
     {
-      std::cout << "missing input characterization" << std::endl;
+      std::cout << "missing chosen algorithm" << std::endl;
       return 1;
     }
-  std::string mode = argv[1];
-  std::string method = argv[2];
-  if ((mode != "parallel" && mode != "sequential") ||
-      (method != "Horner" && method != "Standard"))
+  std::string method = argv[1];
+  if (method != "Horner" && method != "Standard")
     {
-      std::cout << "wrong input" << std::endl;
+      std::cout << "method not found" << std::endl;
       return 1;
     }
   unsigned int degree;
@@ -59,9 +57,9 @@ int main(int argc, char **argv) {
   Timings::Chrono timer;
 
   std::cout << "Computing " << n_points << " evaluation of polynomial"
-            << " with " << method << " " << mode << " formula" << std::endl;
+            << " with " << method << " formula" << std::endl;
   timer.start();
-  evaluate_poly(points, coeff, method, mode);
+  evaluate_poly(points, coeff, method);
   std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;

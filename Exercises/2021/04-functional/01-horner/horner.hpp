@@ -3,6 +3,12 @@
 #include <vector>
 #include <iostream>
 
+/*!
+ Since std::pow() is very expensive, a specialization for
+ integers is implemented.
+ */
+double pow_integer(const double &x, const unsigned int &n);
+
 //! It evaluates a polynomial using standard rule.
 /*!
   \f$ y=a_0+a_1x+\ldots+a_nx^n\f$
@@ -33,9 +39,8 @@ eval_horner(const std::vector<double> &a, const double &x);
 std::vector<double>
 evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
-              const std::string &       method,
-	      const std::string &       mode);
-/*
+              const std::string &       method);
+
 // This only to show the use of pointers to function.                  
 //! A pointer to function.                                             
 //                                                                     
@@ -43,18 +48,17 @@ evaluate_poly(const std::vector<double> &points,
 // double &); In C++11 it is preferable to do 
 using eval_method = double (*)(const std::vector<double> &,
                                const double &);
-*/
+
 //! Evaluates polynomial in a set of points.
 /*!
   @param points  Vector of points to compute the polynomial.
   @param a       Polynomial coefficients.
   @result        A vector with the evaluated points
   @param method  Method to evaluate the polynomial
-
+*/
 std::vector<double>
-evaluate_poly(const std::vector<double> &points,
+evaluate_poly_old(const std::vector<double> &points,
               const std::vector<double> &a,
               eval_method                method);
-*/
 
 #endif /* HORNER_HPP */
