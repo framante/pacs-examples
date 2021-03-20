@@ -12,11 +12,15 @@ HEADERS=$(wildcard *.hpp)
 exe_sources=$(filter main%.cpp,$(SRCS))
 EXEC=$(exe_sources:.cpp=)
 
-.phony= all clean distclean
+.phony= all parallel clean distclean
 
 .DEFAULT_GOAL = all
 
 all: $(EXEC)
+
+parallel: CPPFLAGS += -DPARALLELEXEC -I$(mkTbbInc)
+parallel: LDLIBS += -L$(mkTbbLib) -ltbb
+parallel: all
 
 $(EXEC): $(OBJS)
 

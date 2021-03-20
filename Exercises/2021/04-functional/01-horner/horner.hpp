@@ -1,6 +1,7 @@
 #ifndef HORNER_HPP
 #define HORNER_HPP
 #include <vector>
+#include <iostream>
 
 //! It evaluates a polynomial using standard rule.
 /*!
@@ -38,8 +39,20 @@ using eval_method = double (*)(const std::vector<double> &,
   @param method  Method to evaluate the polynomial
  */
 std::vector<double>
+evaluate_poly_old(const std::vector<double> &points,
+                  const std::vector<double> &a,
+                  eval_method                method);
+
+//! Evaluates polynomial in a set of points.                          
+/*!                                                                   
+  @param points  Vector of points to compute the polynomial.          
+  @param a       Polynomial coefficients.                             
+  @result        A vector with the evaluated points                   
+  @param method  Method to evaluate the polynomial                   
+ */
+std::vector<double>
 evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
-              eval_method                method);
+              std::string &             method);
 
 #endif /* HORNER_HPP */

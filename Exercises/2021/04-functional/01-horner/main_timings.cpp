@@ -11,6 +11,17 @@
 #include <vector>
 
 int main(int argc, char **argv) {
+  if (argc != 2)
+    {
+      std::cout << "missing chosen algorithm" << std::endl;
+      return 1;
+    }
+  std::string method = argv[1];
+  if (method != "Horner" && method != "Standard")
+    {
+      std::cout << "method not found" << std::endl;
+      return 1;
+    }
   unsigned int degree;
   std::cout << "Polynomial degree" << std::endl;
   std::cout << "=> ";
@@ -46,13 +57,13 @@ int main(int argc, char **argv) {
   Timings::Chrono timer;
 
   std::cout << "Computing " << n_points << " evaluation of polynomial"
-            << " with standard formula" << std::endl;
+            << " with " << method << " formula" << std::endl;
   timer.start();
-  evaluate_poly(points, coeff, &eval);
+  evaluate_poly(points, coeff, method);
   std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;
-
+  /*
   std::cout << "Computing " << n_points << " evaluation of the polynomial with"
             << " Horner's rule" << std::endl;
   timer.start();
@@ -60,4 +71,6 @@ int main(int argc, char **argv) {
   std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;
+  */
+  return 0;
 }
