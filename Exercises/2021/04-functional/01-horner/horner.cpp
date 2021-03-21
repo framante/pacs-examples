@@ -14,8 +14,8 @@
 
 double pow_integer(const double &x, const unsigned int &n)
 {
-  double res{x};
-  for (unsigned int i = 2; i != n + 1; ++i)
+  double res{1.};
+  for (unsigned int i = 0; i < n; ++i)
     res *= x;
   return res;
 }
@@ -58,8 +58,7 @@ evaluate_poly_old(const std::vector<double> &points,
   // third version
   std::function<double(double)> eval_point =
     [&a, &method](const double & point){ return method(a, point); };
-  std::transform(std::execution::par, points.begin(),
-		 points.end(), res.begin(), eval_point);
+  std::transform(points.begin(),points.end(), res.begin(), eval_point);
    
   return res;
 }
@@ -73,7 +72,7 @@ evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
               const std::string &        method)
 {
-  std::vector<double> res(points.size(), 0.0);
+  std::vector<double> ret(points.size(), 0.0);
 
   // it's a std::function<double(const double &x)>
   auto eval = [&a](const double & point) -> double {
@@ -90,14 +89,14 @@ evaluate_poly(const std::vector<double> &points,
 
   if (method == "Standard")
     std::transform(std::execution::par, points.begin(),
-                 points.end(), res.begin(),
+                 points.end(), ret.begin(),
                  eval);
 
   else if (method == "Horner")
     std::transform(std::execution::par, points.begin(),
-                 points.end(), res.begin(),
+                 points.end(), ret.begin(),
                  eval_horner);
-  return res;
+  return ret;
 }
 
 #else
@@ -108,7 +107,7 @@ evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
               const std::string &        method)
 {
-  std::vector<double> res(points.size(), 0.0);
+  std::vector<double> ret(points.size(), 0.0);
 
   // both eval and eval_horner are
   // std::function<double(const double &x)>                            
@@ -127,12 +126,12 @@ evaluate_poly(const std::vector<double> &points,
 		     };
 
   if (method == "Standard")
-    std::transform(points.begin(), points.end(), res.begin(),
+    std::transform(points.begin(), points.end(), ret.begin(),
                    eval);
 
   else if (method == "Horner")
-    std::transform(points.begin(), points.end(), res.begin(),
+    std::transform(points.begin(), points.end(), ret.begin(),
                    eval_horner);
-  return res;
+  return ret;
 }                 
 #endif

@@ -2,7 +2,6 @@
 //! @brief  A test of the class Chrono and of polynomial evaluation.
 //! @detail We compare the evaluation of a polygon with the standard
 //! rule against Horner's rule.
-
 #include "chrono.hpp"
 #include "horner.hpp"
 
@@ -60,16 +59,13 @@ int main(int argc, char **argv) {
             << " with " << method << " formula" << std::endl;
   timer.start();
   evaluate_poly(points, coeff, method);
-  std::cout << std::endl;
   timer.stop();
   std::cout << timer << std::endl;
 
-  /*
-  std::cout << "Computing " << n_points << " evaluation of the polynomial "
+  /*std::cout << "Computing " << n_points << " evaluation of the polynomial "
             << "with Horner's rule" << std::endl;
   timer.start();
-  evaluate_poly(points, coeff, "Horner");
-  std::cout << std::endl;
+  evaluate_poly_old(points, coeff, &eval);
   timer.stop();
   std::cout << timer << std::endl;
   */
