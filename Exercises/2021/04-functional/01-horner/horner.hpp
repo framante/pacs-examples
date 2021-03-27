@@ -2,7 +2,6 @@
 #define HORNER_HPP
 #include <vector>
 #include <iostream>
-
 /*!
  Since std::pow() is very expensive, a specialization for
  integers is implemented.
@@ -29,25 +28,14 @@ eval(const std::vector<double> &a, const double &x);
 double
 eval_horner(const std::vector<double> &a, const double &x);
 
-//! Evaluates polynomial in a set of points.                           
-/*!                                                                    
-  @param points  Vector of points to compute the polynomial.           
-  @param a       Polynomial coefficients.                              
-  @result        A vector with the evaluated points                    
-  @param method  Method to evaluate the polynomial                     
- */
-std::vector<double>
-evaluate_poly(const std::vector<double> &points,
-              const std::vector<double> &a,
-              const std::string &       method);
 
-// This only to show the use of pointers to function.                  
-//! A pointer to function.                                             
-//                                                                     
-// typedef double (*eval_method)(const std::vector<double> &, const    
-// double &); In C++11 it is preferable to do 
-using eval_method = double (*)(const std::vector<double> &,
-                               const double &);
+// This only to show the use of pointers to function.
+//! A pointer to function.
+//
+// typedef double (*eval_method)(const std::vector<double> &, const
+// double &); In C++11 it is preferable to do
+using eval_method = double (*)(const std::vector<double> &, const double &);
+
 
 //! Evaluates polynomial in a set of points.
 /*!
@@ -58,7 +46,19 @@ using eval_method = double (*)(const std::vector<double> &,
 */
 std::vector<double>
 evaluate_poly_old(const std::vector<double> &points,
+                  const std::vector<double> &a,
+                  eval_method                method);
+
+//! Evaluates polynomial in a set of points.                          
+/*!                                                                   
+  @param points  Vector of points to compute the polynomial.          
+\  @param a       Polynomial coefficients.                             
+  @result        A vector with the evaluated points                   
+  @param method  Method to evaluate the polynomial                   
+ */
+std::vector<double>
+evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
-              eval_method                method);
+              const std::string &       method);
 
 #endif /* HORNER_HPP */

@@ -42,9 +42,9 @@ int main(int argc, char **argv) {
   }
   */
 
-  double x_0 = 0.00;
-  double x_f = 1.00;
-  double h = 0.5e-6;
+  double       x_0      = 0.00;
+  double       x_f      = 1.00;
+  double       h        = 0.5e-6;
   unsigned int n_points = static_cast<unsigned int>((x_f - x_0) / h);
 
   std::vector<double> points(n_points + 1);
@@ -62,8 +62,9 @@ int main(int argc, char **argv) {
   timer.stop();
   std::cout << timer << std::endl;
 
-  /*std::cout << "Computing " << n_points << " evaluation of the polynomial "
-            << "with Horner's rule" << std::endl;
+  /*
+  std::cout << "Computing " << n_points << " evaluation of the polynomial with"
+            << " Horner's rule" << std::endl;
   timer.start();
   evaluate_poly_old(points, coeff, &eval);
   timer.stop();

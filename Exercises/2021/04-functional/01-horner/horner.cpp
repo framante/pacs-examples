@@ -2,7 +2,7 @@
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-
+//#include <functional>
 // Parallel policies are only available in GCC since version 9.
 #ifdef PARALLELEXEC
 #if defined(__GNUC__) && (__GNUC__ >= 9)
@@ -58,8 +58,8 @@ evaluate_poly_old(const std::vector<double> &points,
   // third version
   std::function<double(double)> eval_point =
     [&a, &method](const double & point){ return method(a, point); };
+
   std::transform(points.begin(),points.end(), res.begin(), eval_point);
-   
   return res;
 }
 
@@ -72,6 +72,7 @@ evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
               const std::string &        method)
 {
+
   std::vector<double> ret(points.size(), 0.0);
 
   // it's a std::function<double(const double &x)>
@@ -107,6 +108,7 @@ evaluate_poly(const std::vector<double> &points,
               const std::vector<double> &a,
               const std::string &        method)
 {
+
   std::vector<double> ret(points.size(), 0.0);
 
   // both eval and eval_horner are
