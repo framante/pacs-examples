@@ -9,7 +9,6 @@ class Domain
 public:
   Domain(const std::string & filename);
   
-private:
   double domain_size;
   double pub_size;
   double pub_x;
@@ -20,7 +19,7 @@ class ContagionParameters
 {
  public:
   ContagionParameters(const std::string & filename);
- private:
+
   double n_people;
   unsigned int n_timesteps_per_day;
   unsigned int  n_timesteps;
@@ -34,7 +33,7 @@ class PersonParameters
 {
 public:
   PersonParameters(const std::string & filename);
-private:
+
   unsigned int n_timesteps_go_to_pub;
   unsigned int n_timesteps_at_pub;
   unsigned int n_timesteps_recover;
