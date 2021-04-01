@@ -4,15 +4,16 @@
 
 Person::Person(const std::string & filename, \
 	       const State & init_state) :
-  personparams(PersonParameters(filename)),
-  domainparams(Domain(filename)),
-  contagionparams(ContagionParameters(filename)),
+  personparams(filename),
+  domainparams(filename),
+  contagionparams(filename),
   engine(std::chrono::system_clock::now().time_since_epoch().count()),
   rand(0., 1.),
   randi(1, personparams.n_timesteps_go_to_pub),
   state(init_state),
   x(rand(engine) * domainparams.domain_size),
   y(rand(engine) * domainparams.domain_size),
+  z(rand(engine) * domainparams.domain_size),
   does_sd(false),
   t_infection(0),
   is_at_pub(false),
@@ -34,6 +35,7 @@ Person::move()
     {
       x_old = x;
       y_old = y;
+      z_old = z;
     }
 
   Move next_move;
@@ -59,11 +61,14 @@ Person::move()
   if (next_move == Move::Walk)
     {
       // generate random step and update x, y
-      const double alpha = 2 * M_PI * rand(engine);
-      const double dx = personparams.dr * std::cos(alpha);
-      const double dy = personparams.dr * std::sin(alpha);
+      const double phi = 2 * M_PI * rand(engine);
+      const double theta = M_PI * rand(engine);
+      const double dx = personparams.dr * std::cos(phi);
+      const double dy = personparams.dr * std::sin(phi);
+      const double dz = personparams.dr * std::cos(theta);
       x += dx;
       y += dy;
+      z += dz;
       
       // check that x and y are not outside of the domain
       if (x < 0)
@@ -72,8 +77,12 @@ Person::move()
 	x = domainparams.domain_size;
       if (y < 0)
 	y = 0;
-      else if (y < domainparams.domain_size)
+      else if (y > domainparams.domain_size)
 	y = domainparams.domain_size;
+      if (z < 0)
+	z = 0;
+      else if (z > domainparams.domain_size)
+	z = domainparams.domain_size;
     }
   else if (next_move == Move::Stay)
     {
@@ -83,13 +92,17 @@ Person::move()
   else if (next_move == Move::Go_To_Pub)
     {
       // generate random position inside the pub domain
-      // [pub_x - pub_size/2, pub_x + pub_size/2]
-      const double alpha = 2 * M_PI * rand(engine);
-      x = domainparams.pub_x + std::cos(alpha) * \
+      // [pub_x - pub_size/2, pub_x + pub_size/2, pub_z + pub_size/2]
+      const double phi = 2 * M_PI * rand(engine);
+      const double theta = M_PI * rand(engine);
+      
+      x = domainparams.pub_x + std::cos(phi) * \
 	domainparams.pub_size;
-      y = domainparams.pub_x + std::sin(alpha) * \
+      y = domainparams.pub_x + std::sin(phi) *	\
 	domainparams.pub_size;
-
+      z = domainparams.pub_x + std::cos(theta) * \
+	domainparams.pub_size;
+      
       is_at_pub = true;
       t_go_to_pub = -1;
       //t_spent_at_pub = 0;
@@ -99,6 +112,7 @@ Person::move()
       // restore old positions
       x = x_old;
       y = y_old;
+      z = z_old;
       
       // reset counters
       is_at_pub = false;
@@ -125,8 +139,10 @@ Person::update_infection(std::vector<Person> & people)
 	  // compute distance
 	  const double x_distance = x - person.x;
 	  const double y_distance = y - person.y;
+	  const double z_distance = z - person.z;
 	  const double distance = std::sqrt(x_distance * x_distance +
-					    y_distance * y_distance);
+					    y_distance * y_distance +
+					    z_distance * z_distance);
 	  // if it's not me
 	  if (distance < 1e-12)
 	    continue;

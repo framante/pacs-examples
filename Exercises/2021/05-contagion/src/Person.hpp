@@ -35,7 +35,7 @@ public:
   bool
   is_susceptible() const
   {
-    return (state == State::Susceptile);
+    return (state == State::Susceptible);
   }
 
   bool

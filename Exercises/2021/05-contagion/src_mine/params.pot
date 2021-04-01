@@ -1,5 +1,5 @@
 [domain]
-  # Domain is [0, domain_size] x [0, domain_size].
+  # Domain is [0, domain_size] x [0, domain_size] x [0, domain_size].
   domain_size = 1
 
   # Pub size and location.
@@ -7,7 +7,7 @@
 
   pub_x = 0.5
   pub_y = 0.5
-
+  pub_z = 0.5
   [../]
 
 [contagion]

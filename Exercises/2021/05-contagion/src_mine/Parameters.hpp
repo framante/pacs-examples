@@ -13,6 +13,7 @@ public:
   double pub_size;
   double pub_x;
   double pub_y;
+  double pub_z;
 };
 
 class ContagionParameters

@@ -136,7 +136,7 @@ Person::update_infection(std::vector<Person> &people)
             continue;
 
           // If "other" is close and has not previously recovered.
-          if (distance < contagion_parameters.r_infection &&
+          if (distance < contagion_params.r_infection &&
               people[n].state == State::Susceptible)
             {
               people[n].state = State::Infected;

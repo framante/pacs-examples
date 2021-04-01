@@ -9,8 +9,9 @@ class Contagion
 public:
   Contagion(const std::string &filename);
 
-  void
-  run();
+  void run();
+  void simulate();
+  void output_results() const;
 
 private:
   ContagionParameters contagion_parameters;

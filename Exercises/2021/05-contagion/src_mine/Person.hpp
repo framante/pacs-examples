@@ -46,11 +46,11 @@ private:
 
   double x;
   double y;
+  double z;
   
-  double x_old; // to be set???
+  double x_old; 
   double y_old;
-
-  
+  double z_old;  
 
   bool does_sd;
   unsigned int t_infection;

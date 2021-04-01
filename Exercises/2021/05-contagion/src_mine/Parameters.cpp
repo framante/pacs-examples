@@ -9,6 +9,7 @@ Domain::Domain(const std::string & filename)
   pub_size = parser("domain/pub_size", 0.1);
   pub_x = parser("domain/pub_x", 0.5);
   pub_y = parser("domain/pub_y", 0.5);
+  pub_z = parser("domain/pub_z", 0.5);
 }
 
 ContagionParameters::ContagionParameters(const std::string & filename)
