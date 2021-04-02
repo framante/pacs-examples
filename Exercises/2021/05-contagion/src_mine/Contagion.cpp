@@ -10,7 +10,7 @@ Contagion::Contagion(const std::string & filename):
   n_susceptible(contagionparams.n_timesteps + 1, 0),
   time(contagionparams.n_timesteps + 1, 0.)
 {
-  people.reserve(contagionparams.n_timesteps);
+  people.reserve(contagionparams.n_people);
   
   for(std::size_t i = 0; i < contagionparams.n_people; ++i)
     {
@@ -78,6 +78,15 @@ Contagion::output_results() const
     }
   file.close();
 
+  // Print a resume of what happened
+  std::cout << "final results: " << std::endl;
+  std::cout << "Initial susceptible: " << n_susceptible[0] << std::endl;
+  std::cout << "Final susceptible: " << n_susceptible[contagionparams.n_timesteps] << std::endl;
+  std::cout << "Initial infected: " << n_infected[0] << std::endl;
+  std::cout << "Final infected: " << n_infected[contagionparams.n_timesteps] << std::endl;
+  std::cout << "Initial recovered: "<< n_recovered[0] << std::endl;
+  std::cout << "Final recovered: " << n_recovered[contagionparams.n_timesteps] << std::endl;
+  
   // Plot results.                                                                                                                                 
   Gnuplot gp;
   gp << "set xlabel 'Time [days]'; set ylabel 'No. of people'; set key center ""right; plot "

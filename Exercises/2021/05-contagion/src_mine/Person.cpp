@@ -27,7 +27,7 @@ Person::Person(const std::string & filename, \
 void
 Person::move()
 {
-  t_go_to_pub += 1;
+  t_go_to_pub -= 1;
 
   if (is_at_pub)
     t_spent_at_pub += 1;
@@ -105,7 +105,6 @@ Person::move()
       
       is_at_pub = true;
       t_go_to_pub = -1;
-      //t_spent_at_pub = 0;
     }
   else if (next_move == Move::Return_From_Pub)
     {
@@ -146,8 +145,6 @@ Person::update_infection(std::vector<Person> & people)
 	  // if it's not me
 	  if (distance < 1e-12)
 	    continue;
-	  else
-	    break;
 
 	  // if "other is too close and has not previously recovered
 	  if (distance < contagionparams.r_infection &&
