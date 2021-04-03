@@ -12,7 +12,7 @@
 
 [contagion]
   # Number of people.
-  n_people = 200
+  n_people = 300
 
   # Number of timesteps per day.
   n_timesteps_per_day = 24

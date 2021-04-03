@@ -85,8 +85,10 @@ Person::move()
     {
       // Generate random position inside the pub domain.
       // [pub_x - pub_size / 2, pub_x + pub_size / 2].
-      x = domain_params.pub_x + (rand(engine) - 0.5) * domain_params.pub_size;
-      y = domain_params.pub_y + (rand(engine) - 0.5) * domain_params.pub_size;
+      x = domain_params.pub_x + (rand(engine) - 0.5) * \
+	domain_params.pub_size;
+      y = domain_params.pub_y + (rand(engine) - 0.5) * \
+	domain_params.pub_size;
 
       t_go_to_pub = -1;
       is_at_pub   = true;
@@ -130,7 +132,8 @@ Person::update_infection(std::vector<Person> &people)
           const double x_dist = x - people[n].x;
           const double y_dist = y - people[n].y;
 
-          const double distance = std::sqrt(x_dist * x_dist + y_dist * y_dist);
+          const double distance = std::sqrt(x_dist * x_dist + \
+					    y_dist * y_dist);
 
           if (distance < 1e-12) // people[n] is me.
             continue;
