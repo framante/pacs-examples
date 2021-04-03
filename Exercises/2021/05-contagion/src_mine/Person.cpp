@@ -60,35 +60,33 @@ Person::move()
 
   if (next_move == Move::Walk)
     {
-      // generate random step and update x, y
-      const double phi = 2 * M_PI * rand(engine);
-      const double theta = M_PI * rand(engine);
-      const double dx = personparams.dr * std::cos(phi);
-      const double dy = personparams.dr * std::sin(phi);
-      const double dz = personparams.dr * std::cos(theta);
-      x += dx;
-      y += dy;
-      z += dz;
-      
-      // check that x and y are not outside of the domain
-      if (x < 0)
-	x = 0;
-      else if (x > domainparams.domain_size)
-	x = domainparams.domain_size;
-      if (y < 0)
-	y = 0;
-      else if (y > domainparams.domain_size)
-	y = domainparams.domain_size;
-      if (z < 0)
-	z = 0;
-      else if (z > domainparams.domain_size)
-	z = domainparams.domain_size;
+      bool out_of_bounds = true;
+      double x_new = 0.;
+      double y_new = 0.;
+      double z_new = 0.;
+      do
+	{
+	  // Generate random step and update x, y
+	  const double phi = 2 * M_PI * rand(engine);
+	  const double theta = M_PI * rand(engine);
+
+	  const double dx = personparams.dr * std::cos(phi);
+	  const double dy = personparams.dr * std::sin(phi);
+	  const double dz = personparams.dr * std::cos(theta);
+	  x_new = x + dx;
+	  y_new = y + dy;
+	  z_new = z + dz;
+          // check that x and y are not outside of the domain
+	  out_of_bounds = (x_new < 0) or
+	    (x_new > domainparams.domain_size)
+	    or (y_new < 0) or (y_new > domainparams.domain_size)
+	    or (z_new < 0) or (z_new > domainparams.domain_size);
+	}
+      while(out_of_bounds);
+      x = x_new;
+      y = y_new;
+      z = z_new;
     }
-  else if (next_move == Move::Stay)
-    {
-      // do nothing
-    }
-  
   else if (next_move == Move::Go_To_Pub)
     {
       // generate random position inside the pub domain
@@ -117,6 +115,10 @@ Person::move()
       is_at_pub = false;
       t_go_to_pub = personparams.n_timesteps_go_to_pub;
       t_spent_at_pub = 0;
+    }
+  else // if (next_move == Move::Stay)
+    {
+      // do nothing
     }
 }
 	       
