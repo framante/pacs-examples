@@ -1,6 +1,9 @@
 #include "Person.hpp"
 #include <iostream>
 #include <chrono>
+#include <cmath>
+#include <limits>
+#include <algorithm>
 
 Person::Person(const std::string & filename, \
 	       const State & init_state) :
@@ -135,8 +138,8 @@ Person::update_infection(std::vector<Person> & people)
     }
   if (state == State::Infected)
     {
-      for(auto & person : people)
-	{
+      std::for_each(people.begin(), people.end(),
+		      [this](Person & person){
 	  // compute distance
 	  const double x_distance = x - person.x;
 	  const double y_distance = y - person.y;
@@ -145,32 +148,13 @@ Person::update_infection(std::vector<Person> & people)
 					    y_distance * y_distance +
 					    z_distance * z_distance);
 	  // if it's not me
-	  if (distance < 1e-12)
-	    continue;
+	  if (distance <= std::numeric_limits<double>::epsilon())
+	    return;
 
 	  // if "other is too close and has not previously recovered
 	  if (distance < contagionparams.r_infection &&
 	      person.state == State::Susceptible)
 	    person.state = State::Infected;
-	}
+		      });
     }
-}
-
-
-bool
-Person::is_infected() const
-{
-  return ( state == State::Infected);
-}
-
-bool
-Person::is_susceptible() const
-{
-  return ( state == State::Susceptible);
-}
-
-bool
-Person::is_recovered() const
-{
-  return ( state == State::Recovered);
 }

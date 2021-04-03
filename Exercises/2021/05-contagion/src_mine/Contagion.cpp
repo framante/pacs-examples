@@ -1,6 +1,6 @@
 #include "Contagion.hpp"
 #include "gnuplot-iostream.hpp"
-
+#include <algorithm>
 
 
 Contagion::Contagion(const std::string & filename):
@@ -29,22 +29,27 @@ void Contagion::simulate()
     {
       time[step] = static_cast<double>(step) / \
 	contagionparams.n_timesteps_per_day;
-
-      for (std::size_t n = 0; n < people.size(); ++n)
-	{
-	  // update the position of people
-	  people[n].move();
-
-	  // update the infected state of people
-	  people[n].update_infection(people);
-
-	  if (people[n].is_infected())
-	    ++n_infected[step];
-	  else if (people[n].is_recovered())
-	    ++n_recovered[step];
-	  else if (people[n].is_susceptible())
-	    ++n_susceptible[step];
-	}
+      if (step >=1 )
+	std::for_each(people.begin(), people.end(),
+		      [this](Person & person){
+			// update the position of people
+			person.move();
+			// update the infected state of people
+			person.update_infection(people);
+		      });
+      n_susceptible[step] = std::count_if(people.begin(), people.end(),
+					  [](const Person & p){
+					    return p.is_susceptible();
+					  });
+      n_infected[step] = std::count_if(people.begin(), people.end(),
+					  [](const Person & p){
+					    return p.is_infected();
+					  });
+      n_recovered[step] = std::count_if(people.begin(), people.end(),
+					  [](const Person & p){
+					    return p.is_recovered();
+					  });
+      
     }
 }
 

@@ -29,9 +29,19 @@ public:
   void move();
   void update_infection(std::vector<Person> & people);
 
-  bool is_infected() const;
-  bool is_susceptible() const;
-  bool is_recovered() const;
+  inline bool is_infected() const
+  {
+    return ( state == State::Infected);
+  }
+
+  inline bool is_susceptible() const
+  {
+    return ( state == State::Susceptible);
+  }
+  inline bool is_recovered() const
+  {
+    return ( state == State::Recovered);
+  }
   
 private:
   PersonParameters personparams;
