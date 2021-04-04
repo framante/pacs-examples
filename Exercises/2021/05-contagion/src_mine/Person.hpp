@@ -28,20 +28,22 @@ public:
   Person(const std::string & filename, const State& init_state);
   void move();
   void update_infection(std::vector<Person> & people);
-
+  bool give_birth(const std::string & filename,
+		  std::vector<Person> & people);
+  bool die(std::vector<Person> & people);
   inline bool is_infected() const
   {
     return ( state == State::Infected);
-  }
+  };
 
   inline bool is_susceptible() const
   {
     return ( state == State::Susceptible);
-  }
+  };
   inline bool is_recovered() const
   {
     return ( state == State::Recovered);
-  }
+  };
   
 private:
   PersonParameters personparams;

@@ -29,7 +29,7 @@ void Contagion::simulate()
     {
       time[step] = static_cast<double>(step) / \
 	contagionparams.n_timesteps_per_day;
-      if (step >=1 )
+      if (step >= 1)
 	std::for_each(people.begin(), people.end(),
 		      [this](Person & person){
 			// update the position of people

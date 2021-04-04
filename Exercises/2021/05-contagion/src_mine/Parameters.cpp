@@ -30,4 +30,7 @@ PersonParameters::PersonParameters(const std::string & filename)
   n_timesteps_at_pub = parser("person/n_timesteps_at_pub", 3);
   n_timesteps_recover = parser("person/n_timesteps_recover", 240);
   dr = parser("person/dr", 0.05);
+  birth = parser("person/birth", 0.3);
+  death = parser("person/death", 0.01);
+  disease_death = parser("person/disease_death", 0.1);
 }

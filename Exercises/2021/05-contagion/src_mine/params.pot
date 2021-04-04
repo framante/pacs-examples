@@ -46,5 +46,14 @@
 
   # Step length per timestep.
   dr = 0.05
+
+  # Probability for one person to have a child.
+  birth = 0.25
+
+  # Probability for one person to die.
+  death = 0.05
+
+  # Probability for one person to die while infected.
+  disease_death = 0.01
   
   [../]

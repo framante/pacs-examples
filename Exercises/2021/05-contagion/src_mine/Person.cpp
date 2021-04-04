@@ -138,7 +138,7 @@ Person::update_infection(std::vector<Person> & people)
     }
   if (state == State::Infected)
     {
-      std::for_each(people.begin(), people.end(),
+     std::for_each(people.begin(), people.end(),
 		      [this](Person & person){
 	  // compute distance
 	  const double x_distance = x - person.x;
@@ -157,4 +157,42 @@ Person::update_infection(std::vector<Person> & people)
 	    person.state = State::Infected;
 		      });
     }
+}
+
+bool Person::give_birth(const std::string & filename,
+			std::vector<Person> & people)
+{
+  if (rand(engine) < personparams.birth)
+    {
+      people.emplace_back(filename, State::Susceptible);
+      return true;
+    }
+  else
+    return false;
+}
+
+bool Person::die(std::vector<Person> & people)
+{
+  double probability = rand(engine);
+  if (state == State::Infected and
+      probability < personparams.disease_death)
+    {
+      auto it = std::find_if(people.cbegin(), people.cend(),
+			     [this](const Person & person)
+	    {
+	      return (state == person.state and
+		      x == person.x and y == person.y and
+		      z == person.z and x_old == person.x_old
+		      and y_old == person.y_old and
+		      z_old == person.z_old and does_sd == person.does_sd
+		      and t_infection == person.t_infection and
+		      is_at_pub == person.is_at_pub and
+		      t_go_to_pub == person.t_go_to_pub and
+		      t_spent_at_pub == person.t_spent_at_pub);
+			     });
+      people.erase(it);
+      return true;
+    }
+  else
+    return false;
 }

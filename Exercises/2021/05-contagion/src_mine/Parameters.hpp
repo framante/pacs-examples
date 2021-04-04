@@ -39,6 +39,9 @@ public:
   unsigned int n_timesteps_at_pub;
   unsigned int n_timesteps_recover;
   float dr;
+  float birth;
+  float death;
+  float disease_death;
 };
 
 
