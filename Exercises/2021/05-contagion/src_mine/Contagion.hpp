@@ -12,9 +12,10 @@ public:
   void output_results() const;
   void simulate();
   
+  
 private:
   ContagionParameters contagionparams;
-  std::vector<Person> people;
+  container_type people;
   std::vector<unsigned int> n_infected;
   std::vector<unsigned int> n_recovered;
   std::vector<unsigned int> n_susceptible;

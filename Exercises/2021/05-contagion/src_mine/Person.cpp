@@ -128,7 +128,7 @@ Person::move()
 	       
 	       
 void
-Person::update_infection(std::vector<Person> & people)
+Person::update_infection(container_type & people)
 {
   if (state == State::Infected)
     {
@@ -168,7 +168,7 @@ Person::update_infection(std::vector<Person> & people)
 }
 
 bool Person::give_birth(const std::string & filename,
-			std::vector<Person> & people)
+			container_type & people)
 {
   if (rand(engine) < personparams.birth)
     {
@@ -179,7 +179,7 @@ bool Person::give_birth(const std::string & filename,
     return false;
 }
 
-bool Person::die(std::vector<Person> & people)
+bool Person::die(container_type & people)
 {
   double probability = rand(engine);
   if (state == State::Infected and
