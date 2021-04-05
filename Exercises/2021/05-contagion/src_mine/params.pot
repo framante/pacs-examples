@@ -12,14 +12,14 @@
 
 [contagion]
   # Number of people.
-  n_people = 200
+  n_people = 500
 
   # Number of timesteps per day.
   n_timesteps_per_day = 24
 
   # Simulation duration
   # (= #days * n_timesteps_per_day).
-  n_timesteps = 1440
+  n_timesteps = 2880
 
   # Number of people initially infected.
   n_init_infected = 1
@@ -43,6 +43,10 @@
   # People recover after n_timesteps_recover timesteps
   # (= #days * n_timesteps_per_day).
   n_timesteps_recover = 240
+
+  # People, if exposed, get infected after n_timesteps_incubation timesteps
+  # (= #days * n_timesteps_per_day).
+  n_timesteps_incubation = 168
 
   # Step length per timestep.
   dr = 0.05

@@ -7,6 +7,7 @@
 
 enum class State
   {
+   Exposed,
    Infected,
    Susceptible,
    Recovered
@@ -25,12 +26,16 @@ class Person
 {
 public:
   
+  // constructor
   Person(const std::string & filename, const State& init_state);
+  
   void move();
   void update_infection(std::vector<Person> & people);
+  // methods for birth and death
   bool give_birth(const std::string & filename,
 		  std::vector<Person> & people);
   bool die(std::vector<Person> & people);
+  // methods returning the state of the individual
   inline bool is_infected() const
   {
     return ( state == State::Infected);
@@ -43,6 +48,10 @@ public:
   inline bool is_recovered() const
   {
     return ( state == State::Recovered);
+  };
+  inline bool is_exposed() const
+  {
+    return ( state == State::Exposed);
   };
   
 private:
@@ -66,6 +75,7 @@ private:
 
   bool does_sd;
   unsigned int t_infection;
+  unsigned int t_exposure;
 
   bool is_at_pub;
   int t_go_to_pub;

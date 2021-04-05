@@ -38,6 +38,7 @@ public:
   unsigned int n_timesteps_go_to_pub;
   unsigned int n_timesteps_at_pub;
   unsigned int n_timesteps_recover;
+  unsigned int n_timesteps_incubation;
   float dr;
   float birth;
   float death;

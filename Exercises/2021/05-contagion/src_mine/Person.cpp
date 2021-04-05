@@ -19,8 +19,9 @@ Person::Person(const std::string & filename, \
   z(rand(engine) * domainparams.domain_size),
   does_sd(false),
   t_infection(0),
+  t_exposure(0),
   is_at_pub(false),
-  t_go_to_pub(randi(engine)), // to be modified later
+  t_go_to_pub(randi(engine)), 
   t_spent_at_pub(0)
 {
   if (rand(engine) < contagionparams.frac_sd)
@@ -136,6 +137,13 @@ Person::update_infection(std::vector<Person> & people)
       if (t_infection > personparams.n_timesteps_recover)
 	state = State::Recovered;	
     }
+  else if (state == State::Exposed)
+    {
+      t_exposure += 1;
+      if (t_exposure > personparams.n_timesteps_incubation)
+	state = State::Infected;
+    }
+  
   if (state == State::Infected)
     {
      std::for_each(people.begin(), people.end(),
@@ -154,7 +162,7 @@ Person::update_infection(std::vector<Person> & people)
 	  // if "other is too close and has not previously recovered
 	  if (distance < contagionparams.r_infection &&
 	      person.state == State::Susceptible)
-	    person.state = State::Infected;
+	    person.state = State::Exposed;
 		      });
     }
 }

@@ -8,6 +8,7 @@ Contagion::Contagion(const std::string & filename):
   n_infected(contagionparams.n_timesteps + 1, 0),
   n_recovered(contagionparams.n_timesteps + 1, 0),
   n_susceptible(contagionparams.n_timesteps + 1, 0),
+  n_exposed(contagionparams.n_timesteps + 1, 0),
   time(contagionparams.n_timesteps + 1, 0.)
 {
   people.reserve(contagionparams.n_people);
@@ -49,6 +50,10 @@ void Contagion::simulate()
 					  [](const Person & p){
 					    return p.is_recovered();
 					  });
+      n_exposed[step] = std::count_if(people.begin(), people.end(),
+					  [](const Person & p){
+					    return p.is_exposed();
+					  });
       
     }
 }
@@ -70,6 +75,7 @@ Contagion::output_results() const
        << std::setw(15) << std::left << "n_susceptible"
        << std::setw(15) << std::left << "n_infected"
        << std::setw(15) << std::left << "n_recovered"
+       << std::setw(15) << std::left << "n_exposed"
        << std::endl;
 
   for (unsigned int step = 0; step <= contagionparams.n_timesteps; \
@@ -78,7 +84,8 @@ Contagion::output_results() const
       file << std::setw(15) << std::left << time[step]
 	   << std::setw(15) << std::left << n_susceptible[step]
            << std::setw(15) << std::left << n_infected[step]
-	   << std::setw(15) << std::left  << n_recovered[step]
+	   << std::setw(15) << std::left << n_recovered[step]
+	   << std::setw(15) << std::left << n_exposed[step]
 	   << std::endl;
     }
   file.close();
@@ -91,6 +98,8 @@ Contagion::output_results() const
   std::cout << "Final infected: " << n_infected[contagionparams.n_timesteps] << std::endl;
   std::cout << "Initial recovered: "<< n_recovered[0] << std::endl;
   std::cout << "Final recovered: " << n_recovered[contagionparams.n_timesteps] << std::endl;
+  std::cout << "Initial exposed: "<< n_exposed[0] << std::endl;
+  std::cout << "Final exposed: " << n_exposed[contagionparams.n_timesteps] << std::endl;
   
   // Plot results.                                                                                                                                 
   Gnuplot gp;
@@ -99,6 +108,8 @@ Contagion::output_results() const
      << "with line linewidth 2 title 'Susceptible',"
      << gp.file1d(std::tie(time, n_infected))
      << "with line linewidth 2 title 'Infected',"
+     << gp.file1d(std::tie(time, n_exposed))
+     << "with line linewidth 2 title 'Exposed',"
      << gp.file1d(std::tie(time, n_recovered))
      << "with line linewidth 2 title 'Recovered'" << std::endl;
 }
