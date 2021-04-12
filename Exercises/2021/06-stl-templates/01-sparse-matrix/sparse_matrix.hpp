@@ -9,11 +9,12 @@
 class sparse_matrix : public std::vector<std::map<unsigned int, double>>
 {
 private:
-  using col_type = std::map<unsigned int, double>;
-  using row_type = std::vector<col_type>;
+  using col_type = std::map<unsigned int, double>; // actually this is a row
+  using row_type = std::vector<col_type>; // actually this is the matrix
 
-  size_t nnz; ///< Number of nonzero elements.
-  size_t m;   ///< Number of nonempty columns.
+  size_t nnz; /// Number of nonzero elements.
+  size_t m;   /// Number of nonempty columns.
+  
 
 public:
   /// Default constructor.
@@ -38,6 +39,19 @@ public:
   /// Set all entries to 0 preserving storage structure.
   void
   reset();
+
+  /// Output stream operator
+  friend
+  std::ostream &
+  operator<<(std::ostream & stream, sparse_matrix & M);
+
+  /// Matrix vector product
+  friend
+  std::vector<double>
+  operator*(const sparse_matrix & M, const std::vector<double> & rhs);
+
 };
+
+
 
 #endif /* SPARSE_MATRIX_HPP */
