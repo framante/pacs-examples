@@ -24,36 +24,21 @@ main(int argc, char **argv)
       A[ii][ii] = 4;
     }
 
-  sparse_matrix B;
-  B.resize(n);
-
-  B[0][0] = 3;
-  B[5][0] = 5;
-
-  /*
   std::cout << "Loop through matrix entries:" << std::endl;
   for (unsigned int ii = 0; ii < n; ++ii)
     for (const auto &[jj, val] : A[ii])
       std::cout << "A[" << ii << "][" << jj << "] = " << val << std::endl;
   std::cout << std::endl << std::endl;
-  */
-  
+
   std::cout << "Stream operator:" << std::endl;
   std::cout << A;
   std::cout << std::endl;
-  std::cout << B;
-  std::cout << std::endl;
-  A.operator+=(B);
-  std::cout << A;
-  std::cout << std::endl;
 
-  /*
   std::vector<unsigned int> irow, jcol;
   std::vector<double>       v;
 
   A.csr(v, jcol, irow);
 
-  std::cout << std::endl;
   std::cout << "CSR vectors:" << std::endl;
   for (auto ii : irow)
     std::cout << ii << " ";
@@ -72,30 +57,6 @@ main(int argc, char **argv)
     for (unsigned int jj = irow[ii]; jj < irow[ii + 1]; ++jj)
       std::cout << "A[" << ii << "][" << jcol[jj] << "] = " << v[jj]
                 << std::endl;
-  
-  std::vector<unsigned int> iroww, jcolw;
-  std::vector<double>       w;
-
-  A.aij(w, jcolw, iroww);
-  std::cout << std::endl;
-  std::cout << "aij vectors:" << std::endl;
-  for (auto ii : iroww)
-    std::cout << ii << " ";
-  std::cout << std::endl;
-
-  for (auto ii : jcolw)
-    std::cout << ii << " ";
-  std::cout << std::endl;
-
-  for (auto ii : w)
-    std::cout << ii << " ";
-  std::cout << std::endl << std::endl;
-
-  std::cout << "Matrix entries from aij:" << std::endl;
-  for (unsigned int i = 0; i < w.size(); ++i)
-    std::cout << "A[" << iroww[i] << "][" << jcolw[i] << "] = " << w[i]
-                << std::endl;
-  */
   std::cout << std::endl;
 
   std::cout << "Matrix-vector product:" << std::endl;
@@ -104,5 +65,4 @@ main(int argc, char **argv)
   for (const auto ii : y)
     std::cout << ii << " ";
   std::cout << std::endl << std::endl;
-  return 0;
 }
