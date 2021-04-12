@@ -102,3 +102,23 @@ operator*(const sparse_matrix & M, const std::vector<double> & rhs)
     }
 }
     
+
+void
+sparse_matrix::operator+=(const sparse_matrix & rhs)
+{
+  if (this->size() != rhs.size())
+    return;
+  else
+    {
+      for (std::size_t r = 0; r < this->size(); ++r)
+	{
+	  for(auto &[c, elem] : rhs[r])
+	  {
+	    if (this->operator[](r).find(c) != this->operator[](r).cend())
+	      this->operator[](r)[c] += elem;
+	    else
+	      this->operator[](r)[c] = elem;
+	  }
+	}
+    }
+}

@@ -50,6 +50,10 @@ public:
   std::vector<double>
   operator*(const sparse_matrix & M, const std::vector<double> & rhs);
 
+  /// Matrix Matrix sum
+  void
+  operator+=(const sparse_matrix & rhs);
+
 };
 
 
