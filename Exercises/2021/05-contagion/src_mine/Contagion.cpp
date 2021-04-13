@@ -4,6 +4,8 @@
 
 
 Contagion::Contagion(const std::string & filename):
+  file_name(filename),
+  personparams(filename),
   contagionparams(filename),
   n_infected(contagionparams.n_timesteps + 1, 0),
   n_recovered(contagionparams.n_timesteps + 1, 0),
@@ -112,4 +114,15 @@ Contagion::output_results() const
      << "with line linewidth 2 title 'Exposed',"
      << gp.file1d(std::tie(time, n_recovered))
      << "with line linewidth 2 title 'Recovered'" << std::endl;
+}
+
+bool
+Contagion::mortality()
+{
+  
+}
+
+bool
+Contagion::natality()
+{
 }
