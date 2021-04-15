@@ -4,9 +4,10 @@
 #include "Parameters.hpp"
 #include <random>
 #include <vector>
+#include <map>
 
 class Person;
-typedef std::vector<Person> container_type;
+typedef std::map<unsigned, Person> container_type;
 
 enum class State
   {
@@ -31,15 +32,16 @@ public:
   
   // constructor
   Person(const std::string & filename, const State& init_state);
+  Person & operator=(const Person &) = default;
+  Person(const Person &) = default;
   
   void move();
   void update_infection(container_type & people);
 
   // methods for birth and death
-  bool give_birth(const std::string & filename,
-		  container_type & people);
-  bool die(container_type & people);
-
+  bool give_birth();
+  bool die();
+  
   // methods returning the state of the individual
   inline bool is_infected() const
   {

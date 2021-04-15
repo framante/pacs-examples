@@ -147,11 +147,11 @@ Person::update_infection(container_type & people)
   if (state == State::Infected)
     {
      std::for_each(people.begin(), people.end(),
-		      [this](Person & person){
-	  // compute distance
-	  const double x_distance = x - person.x;
-	  const double y_distance = y - person.y;
-	  const double z_distance = z - person.z;
+		      [this](auto & person){
+          // compute distance
+	  const double x_distance = x - person.second.x;
+	  const double y_distance = y - person.second.y;
+	  const double z_distance = z - person.second.z;
 	  const double distance = std::sqrt(x_distance * x_distance +
 					    y_distance * y_distance +
 					    z_distance * z_distance);
@@ -161,46 +161,33 @@ Person::update_infection(container_type & people)
 
 	  // if "other is too close and has not previously recovered
 	  if (distance < contagionparams.r_infection &&
-	      person.state == State::Susceptible)
-	    person.state = State::Exposed;
+	      person.second.state == State::Susceptible)
+	    person.second.state = State::Exposed;
 		      });
     }
 }
 
-bool Person::give_birth(const std::string & filename,
-			container_type & people)
+
+bool
+Person::give_birth()
 {
   if (rand(engine) < personparams.birth)
-    {
-      people.emplace_back(filename, State::Susceptible);
       return true;
-    }
   else
     return false;
 }
 
-bool Person::die(container_type & people)
+bool
+Person::die()
 {
   double probability = rand(engine);
   if (state == State::Infected and
       probability < personparams.disease_death)
-    {
-      auto it = std::find_if(people.cbegin(), people.cend(),
-			     [this](const Person & person)
-	    {
-	      return (state == person.state and
-		      x == person.x and y == person.y and
-		      z == person.z and x_old == person.x_old
-		      and y_old == person.y_old and
-		      z_old == person.z_old and does_sd == person.does_sd
-		      and t_infection == person.t_infection and
-		      is_at_pub == person.is_at_pub and
-		      t_go_to_pub == person.t_go_to_pub and
-		      t_spent_at_pub == person.t_spent_at_pub);
-			     });
-      people.erase(it);
       return true;
-    }
+  else if (state == State::Susceptible and
+	   probability < personparams.death)
+      return true;
   else
     return false;
 }
+

@@ -3,6 +3,8 @@
 #include <algorithm>
 
 
+unsigned Contagion::n_people = 0;
+
 Contagion::Contagion(const std::string & filename):
   file_name(filename),
   personparams(filename),
@@ -13,14 +15,15 @@ Contagion::Contagion(const std::string & filename):
   n_exposed(contagionparams.n_timesteps + 1, 0),
   time(contagionparams.n_timesteps + 1, 0.)
 {
-  people.reserve(contagionparams.n_people);
+  //people.reserve(contagionparams.n_people);
   
   for(std::size_t i = 0; i < contagionparams.n_people; ++i)
     {
       if (i < contagionparams.n_init_infected)
-	people.emplace_back(filename, State::Infected);
+	people.insert({i, Person(filename, State::Infected)});
       else
-	people.emplace_back(filename, State::Susceptible);
+	people.insert({i, Person(filename, State::Susceptible)});
+      ++n_people;
     }
 }
 
@@ -32,29 +35,50 @@ void Contagion::simulate()
     {
       time[step] = static_cast<double>(step) / \
 	contagionparams.n_timesteps_per_day;
+
+      bool born = people.begin()->second.give_birth();
+      bool dead = people.begin()->second.die();
+      if (born)
+	{
+	  this->add_person();
+	  std::cout << "born ";
+	}
+      if (dead)
+	{
+	  this->remove_person(people.begin()->first);
+	  std::cout << "dead ";
+	}
+
       if (step >= 1)
 	std::for_each(people.begin(), people.end(),
-		      [this](Person & person){
+		      [this](auto & p){
+
 			// update the position of people
-			person.move();
+			p.second.move();
 			// update the infected state of people
-			person.update_infection(people);
+			p.second.update_infection(people);
+
+			/*
+                        bool dead = p.second.die();
+			if (dead)
+			  this->remove_person(p.first);
+			*/
 		      });
       n_susceptible[step] = std::count_if(people.begin(), people.end(),
-					  [](const Person & p){
-					    return p.is_susceptible();
+					  [](const auto & p){
+					    return p.second.is_susceptible();
 					  });
       n_infected[step] = std::count_if(people.begin(), people.end(),
-					  [](const Person & p){
-					    return p.is_infected();
+					  [](const auto & p){
+					    return p.second.is_infected();
 					  });
       n_recovered[step] = std::count_if(people.begin(), people.end(),
-					  [](const Person & p){
-					    return p.is_recovered();
+					  [](const auto & p){
+					    return p.second.is_recovered();
 					  });
       n_exposed[step] = std::count_if(people.begin(), people.end(),
-					  [](const Person & p){
-					    return p.is_exposed();
+					  [](const auto & p){
+					    return p.second.is_exposed();
 					  });
       
     }
@@ -65,6 +89,18 @@ Contagion::run()
 {
   simulate();
   output_results();
+}
+
+void
+Contagion::add_person()
+{
+  people.insert({n_people++, Person(file_name, State::Susceptible)});
+}
+
+void
+Contagion::remove_person(container_type::key_type key)
+{
+  people.erase(key);
 }
 
 void
@@ -116,6 +152,7 @@ Contagion::output_results() const
      << "with line linewidth 2 title 'Recovered'" << std::endl;
 }
 
+/*
 bool
 Contagion::mortality()
 {
@@ -126,3 +163,4 @@ bool
 Contagion::natality()
 {
 }
+*/

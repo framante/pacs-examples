@@ -11,9 +11,9 @@ public:
   void run();
   
 private:
-  bool mortality();
-  bool natality();
-
+  static unsigned n_people;
+  void add_person();
+  void remove_person(container_type::key_type key);
   void output_results() const;
   void simulate();
   
