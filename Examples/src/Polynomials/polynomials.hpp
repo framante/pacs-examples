@@ -30,7 +30,7 @@ namespace apsc::LinearAlgebra
       M_coeff.fill(R(0));
       std::copy(right.get_coeff().begin(),right.get_coeff().end(),M_coeff.begin());
     }
-    //! For polynomial of the same type I use the implicit copy-constructore
+    //! For polynomial of the same type I use the implicit copy-constructor
     Polynomial(Polynomial<N,R> const &)=default;
     //! Move constructor is the implicit one
     Polynomial(Polynomial<N,R> &&)=default;
@@ -118,7 +118,7 @@ namespace apsc::LinearAlgebra
     // It it is 0 is an error
     if (Dend==R{0})
       throw std::runtime_error("Polynomial Division Error. Denominator must be a complete polynomial");
-    // get a regerence to quotient coefficients
+    // get a reference to quotient coefficients
     auto & q=Quotient.get_coeff();
     auto dN = NDegree;
     while (dN >= DDegree)
