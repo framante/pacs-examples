@@ -1,10 +1,16 @@
 #include "NewtonTraits.hpp"
+#include "JacobianFactory.hpp"
+#include "Newton.hpp"
+#include <utility>
+
 
 int
 main(int argc, char **argv)
 {
-  using VariableType       = NewtonTraits::VariableType;
-  using JacobianMatrixType = NewtonTraits::JacobianMatrixType;
+  constexpr ProblemType Type = ProblemType::Vector;
+
+  using VariableType       = NewtonTraits<Type>::VariableType;
+  using JacobianMatrixType = NewtonTraits<Type>::JacobianMatrixType;
 
   auto system = [](const VariableType &x) -> VariableType {
     VariableType y(2);
@@ -26,5 +32,21 @@ main(int argc, char **argv)
     return J;
   };
 
+  FullJacobian<Type> jac_full(jacobian_fun);
+
+  const double h = 0.1;
+  DiscreteJacobian<Type> discrete_jac(system, h);
+
+  auto jac = make_jacobian<Type, JacobianType::Full>(jacobian_fun);
+  Newton<Type> newton(system, std::move(jac));
+  // now jac is invalid since it has been moved
+
+  NewtonTraits<Type>::VariableType x0(2);
+  auto result = newton.solve(x0);
+  // or auto [sol, norm_res, norm_incr, iteration, converged] = newton.solve(x0);
+  
+  Newton<Type> quasi_newton(system, make_jacobian<Type, JacobianType::Discrete>(system, h));
+
+  
   return 0;
 }
