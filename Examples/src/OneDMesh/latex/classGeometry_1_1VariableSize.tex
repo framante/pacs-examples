@@ -1,0 +1,75 @@
+\hypertarget{classGeometry_1_1VariableSize}{}\doxysection{Geometry\+::Variable\+Size Class Reference}
+\label{classGeometry_1_1VariableSize}\index{Geometry::VariableSize@{Geometry::VariableSize}}
+
+
+variable mesh size  
+
+
+
+
+{\ttfamily \#include $<$mesh\+Generators.\+hpp$>$}
+
+
+
+Inheritance diagram for Geometry\+::Variable\+Size\+:
+% FIG 0
+
+
+Collaboration diagram for Geometry\+::Variable\+Size\+:
+% FIG 1
+\doxysubsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+using \mbox{\hyperlink{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}{Spacing\+Function}} = std\+::function$<$ double(double const \&x)$>$
+\end{DoxyCompactItemize}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classGeometry_1_1VariableSize_ae3eb828e7734d8cbfdcef31f810446bf}{Variable\+Size}} (const \mbox{\hyperlink{classGeometry_1_1Domain1D}{Geometry\+::\+Domain1D}} \&domain, \mbox{\hyperlink{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}{Spacing\+Function}} const \&h, const unsigned int max\+\_\+num\+\_\+elements)
+\begin{DoxyCompactList}\small\item\em Constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classGeometry_1_1VariableSize_ab5650afd9ba869411dab89f01ac02780}\label{classGeometry_1_1VariableSize_ab5650afd9ba869411dab89f01ac02780}} 
+Mesh\+Nodes {\bfseries operator()} () const override
+\end{DoxyCompactItemize}
+\doxysubsection*{Additional Inherited Members}
+
+
+\doxysubsection{Detailed Description}
+variable mesh size 
+
+The class accepts a spacing function h=h(x) which should return a strictly positive value for all x in the domain\+: $ h(x)\ge \alpha>0, \quad x\in\Omega $. The mesh is generated so that \[ x_i=\beta\int_0^i h(s)^{-1}ds \] where $\beta$ 
+
+\doxysubsection{Member Typedef Documentation}
+\mbox{\Hypertarget{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}\label{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}} 
+\index{Geometry::VariableSize@{Geometry::VariableSize}!SpacingFunction@{SpacingFunction}}
+\index{SpacingFunction@{SpacingFunction}!Geometry::VariableSize@{Geometry::VariableSize}}
+\doxysubsubsection{\texorpdfstring{SpacingFunction}{SpacingFunction}}
+{\footnotesize\ttfamily using \mbox{\hyperlink{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}{Geometry\+::\+Variable\+Size\+::\+Spacing\+Function}} =  std\+::function$<$double (double const \& x)$>$}
+
+The spacing function type 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classGeometry_1_1VariableSize_ae3eb828e7734d8cbfdcef31f810446bf}\label{classGeometry_1_1VariableSize_ae3eb828e7734d8cbfdcef31f810446bf}} 
+\index{Geometry::VariableSize@{Geometry::VariableSize}!VariableSize@{VariableSize}}
+\index{VariableSize@{VariableSize}!Geometry::VariableSize@{Geometry::VariableSize}}
+\doxysubsubsection{\texorpdfstring{VariableSize()}{VariableSize()}}
+{\footnotesize\ttfamily Geometry\+::\+Variable\+Size\+::\+Variable\+Size (\begin{DoxyParamCaption}\item[{const \mbox{\hyperlink{classGeometry_1_1Domain1D}{Geometry\+::\+Domain1D}} \&}]{domain,  }\item[{\mbox{\hyperlink{classGeometry_1_1VariableSize_aed664addc8d4fab37e379f0fbf4f7367}{Spacing\+Function}} const \&}]{h,  }\item[{const unsigned int}]{max\+\_\+num\+\_\+elements }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em domain} & A 1D domain \\
+\hline
+{\em h} & spacing function \\
+\hline
+{\em max\+\_\+num\+\_\+elements} & Maximum number of elements \\
+\hline
+\end{DoxyParams}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+mesh\+Generators.\+hpp\item 
+mesh\+Generators.\+cpp\end{DoxyCompactItemize}

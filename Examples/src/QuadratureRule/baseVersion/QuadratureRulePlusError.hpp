@@ -32,7 +32,7 @@ namespace apsc::NumericalIntegration{
     QuadratureRulePlusError();
     //! Cloning method.
     std::unique_ptr<QuadratureRuleBase>   clone() const override;
-    //! Number of quadrature nodes. Delagates to the stored rules.
+    //! Number of quadrature nodes. Delegates to the stored rules.
     int num_nodes()const {return _therule.num_nodes();}
     //! Coordinate of i-th node. Delegates to the stored rules.
     double node(const int i) const {return _therule.node(i);};

@@ -21,7 +21,7 @@ launch a test.
 **IF YOU WANT TO INSTALL THE CODE (needed for other examples) do**
 
     make distclean
-    make dynamic DEBUG=no  (to disable debugging)
+    make dynamic DEBUG=no  (to disable debugging) I DID make alllibs to make it work!!!!
     make install
     make distclean
 
