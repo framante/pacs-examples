@@ -46,6 +46,46 @@ namespace apsc::NumericalIntegration{
        return std::unique_ptr<QuadratureRuleBase>(new GaussLegendre3p(*this));
      }
    };
+
+  //! Gauss  Legendre rule 4pt
+  class GaussLegendre4p final : public StandardQuadratureRule<4>
+   {
+   public:
+     GaussLegendre4p():StandardQuadratureRule<4>
+     {
+       {(18.-std::sqrt(30.))/36.,(18.-std::sqrt(30.))/36.,
+	   (18.+std::sqrt(30.))/36.,(18.-std::sqrt(30.))/36.},
+       {-std::sqrt(3./7.+2./7.*std::sqrt(6./5.)),
+	   -std::sqrt(3./7.-2./7.*std::sqrt(6./5.)),
+	   std::sqrt(3./7.-2./7.*std::sqrt(6./5.)),
+	   std::sqrt(3./7.+2./7.*std::sqrt(6./5.))}
+     }{}
+     std::unique_ptr<QuadratureRuleBase> clone() const override
+     {
+       return std::unique_ptr<QuadratureRuleBase>(new GaussLegendre4p(*this));
+     }
+   };
+
+  //! Gauss  Legendre rule 5pt
+  class GaussLegendre5p final : public StandardQuadratureRule<5>
+   {
+   public:
+     GaussLegendre5p():StandardQuadratureRule<5>
+     {
+       {(322-13*std::sqrt(70))/900.,(322+13*std::sqrt(70))/900.,
+	   128./225.,(322+13*std::sqrt(70))/900.,
+	   (322-13*std::sqrt(70))/900.},
+	 {-std::sqrt(5.+2.*std::sqrt(10./7.))/3.,
+	     -std::sqrt(5.-2.*std::sqrt(10./7.))/3.,
+	     0,std::sqrt(5.-2.*std::sqrt(10./7.))/3.,
+	     std::sqrt(5.+2.*std::sqrt(10./7.))/3.}
+     }{}
+     std::unique_ptr<QuadratureRuleBase> clone() const override
+     {
+       return std::unique_ptr<QuadratureRuleBase>(new GaussLegendre5p(*this));
+     }
+   };
+
   //! Gauss  Lobatto rule 4pt
     class GaussLobatto4p final : public StandardQuadratureRule<4>
     {

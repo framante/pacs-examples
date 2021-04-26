@@ -32,6 +32,8 @@ int main(int argc, char** argv){
   Quadrature m(MidPoint(),mesh);
   Quadrature t(Trapezoidal(),mesh);
   Quadrature gL(GaussLegendre3p(),mesh);
+  Quadrature gL4(GaussLegendre4p(),mesh);
+  Quadrature gL5(GaussLegendre5p(),mesh);
 
 
   cout<<" Now the mesh has "<<mesh.numNodes()<<" nodes"<<endl;
@@ -40,7 +42,8 @@ int main(int argc, char** argv){
   double approxm=m.apply(f);
   cout<<"MidPoint="<<approxm<<" Trapezoidal="<<t.apply(f)<<
       " Simpson="<<approxs<<" GaussLegendre3p="<<gL.apply(f)<<
-      " Exact="<<exactVal<<endl;
+    " GaussLegendre4p="<<gL4.apply(f)<<" GaussLegendre5p="<<gL5.apply(f)<<
+    " Exact="<<exactVal<<endl;
 
   // Now with MonteCarlo
 
@@ -64,6 +67,16 @@ int main(int argc, char** argv){
    Quadrature ga(QuadratureRuleAdaptive<GaussLobatto4p>(targetError,10000),mesh);
    adaptiveResult=ga.apply(f);
    printout(adaptiveResult,exactVal,targetError,"Gauss Lobatto Adaptive");
-  
+
+   //Now the adaptive
+   Quadrature gL4adaptive(QuadratureRuleAdaptive<GaussLegendre4p>(targetError,10000),mesh);
+   adaptiveResult=gL4adaptive.apply(f);
+   printout(adaptiveResult,exactVal,targetError,"Gauss Legendre 4p Adaptive");
+
+   //Now the adaptive
+   Quadrature gL5adaptive(QuadratureRuleAdaptive<GaussLegendre5p>(targetError,10000),mesh);
+   adaptiveResult=gL5adaptive.apply(f);
+   printout(adaptiveResult,exactVal,targetError,"Gauss Legendre 5p Adaptive");
+
 }
   
