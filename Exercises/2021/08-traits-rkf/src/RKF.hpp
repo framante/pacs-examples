@@ -11,11 +11,11 @@ class RKFResult
 public:
   std::vector<double> time;
   std::vector<Type> y;
-  double error_estimate;
-  unsigned n_iter;
-  unsigned n_expansions;
-  unsigned n_reductions;
-  bool failed;
+  double error_estimate = 0.;
+  unsigned n_iter = 0;
+  unsigned n_expansions = 0;
+  unsigned n_reductions = 0;
+  bool failed = false;
 };
 
 template<class ButcherType, class Type>
