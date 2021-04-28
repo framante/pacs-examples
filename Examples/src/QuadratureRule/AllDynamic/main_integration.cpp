@@ -103,7 +103,7 @@ int main(int argc, char** argv){
       return 0;
     }
   // Now get the library with the functions to be integrated
-  // Het a handle to the factory
+  // Get a handle to the factory
   auto & myIntegrands = apsc::NumericalIntegration::myIntegrands;
 //@ to do enucleate this part: useless code repetition!
   nlibs = cl.vector_variable_size("udflib");
