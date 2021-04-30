@@ -44,7 +44,7 @@ main(int argc, char **argv)
     file << solution;
   }
 
-  /*
+
   // Van der Pol oscillator problem with mu = 1.
   {
     const auto f = [](const double &t, const Eigen::VectorXd &y) {
@@ -83,6 +83,6 @@ main(int argc, char **argv)
     std::ofstream file("results_VdP.out");
     file << solution;
   }
-  */
+
   return 0;
 }

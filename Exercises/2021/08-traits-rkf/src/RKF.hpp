@@ -103,7 +103,7 @@ public:
     const auto & b2 = table.b2;
     const auto & c = table.c;
 
-    std::array<double, ButcherType::n_stages()> K;
+    std::array<Type, ButcherType::n_stages()> K;
 
     double time(t);
     K[0] = function(t, y) * h;
