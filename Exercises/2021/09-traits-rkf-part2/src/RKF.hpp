@@ -72,7 +72,10 @@ public:
       {
 	y0.resize(length);
 	for (unsigned i = 0; i < length; ++i)
-	  y0[i] = datafile("y0", 0.1, i);
+	  {
+	    y0[i] = datafile("y0", 0.1, i);
+	    // std::cout<< i << " " << y0[i] << std::endl;
+	  }
       }
       
     h0 = datafile("h0", 0.2);
