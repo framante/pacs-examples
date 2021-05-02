@@ -1,0 +1,7 @@
+t0 = 0.
+tf = 20.
+y0 = 1		# for the scalar case
+h0 = 0.2
+tolerance = 1e-4
+n_max_steps = 1e4
+ButcherType = FehlbergRK12

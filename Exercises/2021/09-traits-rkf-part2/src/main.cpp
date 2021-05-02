@@ -12,16 +12,12 @@ main(int argc, char **argv)
     const auto f = [](const double &t, const double &y) { return -10 * y; };
     const auto sol_exact = [](const double &t) { return std::exp(-10 * t); };
 
-    const double       t0          = 0;
-    const double       tf          = 10;
-    const double       y0          = 1;
-    const double       h0          = 0.2;
-    const double       tolerance   = 1e-4;
-    const unsigned int n_max_steps = 1e4;
+    RKFOptions<RKFType::Scalar> options;
+    options.parse_from_file("data_exp.pot");
 
-    RKF<RKFScheme::RK23_t, RKFType::Scalar> solver(RKFScheme::RK23, f);
+    RKF<RKFType::Scalar> solver(f, options);
 
-    const auto solution = solver(t0, tf, y0, h0, tolerance, n_max_steps);
+    const auto solution = solver();
 
     // Compute error.
     double       max_error = 0;
@@ -33,8 +29,9 @@ main(int argc, char **argv)
 
     std::cout << std::boolalpha;
     std::cout << "*** Model problem ***" << std::endl
+	      << "  solver: " << options.ButcherType << std::endl
               << "  l_inf error: " << max_error << std::endl
-              << "  Tolerance: " << tolerance << std::endl
+              << "  Tolerance: " << options.tolerance << std::endl
               << "  Failed: " << solution.failed << std::endl
               << "  Error estimate: " << solution.error_estimate << std::endl;
     std::cout << std::endl;
@@ -56,24 +53,22 @@ main(int argc, char **argv)
       return out;
     };
 
-    const double t0 = 0;
-    const double tf = 40;
+    RKFOptions<RKFType::Vector> options;
+    options.parse_from_file("data_VdP.pot", 2);
 
-    Eigen::VectorXd y0(2);
-    y0[0] = 1;
-    y0[1] = 1;
+    RKF<RKFType::Vector> solver(f, options);
 
-    const double       h0          = 0.2;
-    const double       tolerance   = 1e-4;
-    const unsigned int n_max_steps = 5e3;
-
-    RKF<RKFScheme::RK45_t, RKFType::Vector> solver(RKFScheme::RK45, f);
-
-    const auto solution = solver(t0, tf, y0, h0, tolerance, n_max_steps);
+    /*
+    auto table =
+    RKFScheme::make_ButcherArray(options.ButcherType);
+    solver.set_table(table);
+    */
+    const auto solution = solver();
 
     std::cout << std::boolalpha;
     std::cout << "*** Van der Pol oscillator ***" << std::endl
-              << "  Tolerance: " << tolerance << std::endl
+      	      << "  solver: " << options.ButcherType << std::endl
+              << "  Tolerance: " << options.tolerance << std::endl
               << "  Failed: " << solution.failed << std::endl
               << "  Error estimate: " << solution.error_estimate << std::endl;
     std::cout << std::endl;

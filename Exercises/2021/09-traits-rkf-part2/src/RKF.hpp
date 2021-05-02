@@ -7,6 +7,9 @@
 #include <iostream>
 #include <limits>
 #include <vector>
+#include <memory>
+#include "GetPot"
+#include <iostream>
 
 /// Struct holding the results of the RKF solver.
 template <class ProblemType>
@@ -32,11 +35,71 @@ public:
   unsigned int reductions = 0;
 };
 
+/*
+*
+   * @param[in] t0               Initial time.
+   * @param[in] tf               Final time.
+   * @param[in] y0               Initial condition.
+   * @param[in] h0               Initial time step.
+   * @param[in] tol              Desired tolerance on error.
+   * @param[in] n_max_steps      Safeguard to avoid too many steps.
+   * @param[in] factor_reduction Multiplication factor for time step reduction.
+   * @param[in] factor_expansion Multiplication factor for time step expansion
+   */
+template <class ProblemType>
+class RKFOptions
+{
+public:
+  using VariableType = typename RKFTraits<ProblemType>::VariableType;
+  RKFOptions() = default;
+  // constructor from file
+  RKFOptions(const std::string & filename,
+	     const unsigned & length = 1)
+  {
+    parse_from_file(filename,length);
+  };
+
+  void
+  parse_from_file(const std::string & filename,
+		  const unsigned & length = 1)
+  {
+    GetPot datafile(filename.c_str());
+    t0 = datafile("t0", 0.);
+    tf = datafile("tf", 10.);
+    if constexpr (std::is_same_v<ProblemType, RKFType::Scalar>)
+		   y0 = datafile("y0", 1.);
+    else
+      {
+	y0.resize(length);
+	for (unsigned i = 0; i < length; ++i)
+	  y0[i] = datafile("y0", 0.1, i);
+      }
+      
+    h0 = datafile("h0", 0.2);
+    tolerance = datafile("tolerance", 1e-4);
+    n_max_steps = datafile("n_max_steps", 1e4);
+    factor_reduction = datafile("factor_reduction", 0.95);
+    factor_expansion = datafile("factor_expansion", 2.);
+    ButcherType = datafile("ButcherType", "RK12");    
+  };
+
+  double t0 = 0;
+  double tf = 10;
+  VariableType y0;
+  double h0 = 0.2;
+  double tolerance = 1e-4;
+  unsigned int  n_max_steps = 1e4;
+  double factor_reduction = 0.95;
+  double factor_expansion = 1.2;
+  std::string ButcherType = "RK12";
+};
+
+
 template <class T, class... Ts>
 inline constexpr bool is_any_v = (std::disjunction_v<std::is_same<T, Ts>...>);
 
 /// Runge-Kutta-Fehlberg solver class.
-template <class ButcherType, class ProblemType>
+template <class ProblemType>
 class RKF
 {
 public:
@@ -47,9 +110,11 @@ public:
   RKF() = default;
 
   /// Constructor.
-  RKF(const ButcherType &table_, const Function &function_)
-    : table(table_)
-    , function(function_)
+  RKF(const Function &function_,
+      const RKFOptions<ProblemType> & options_ = RKFOptions<ProblemType>())
+    : function(function_),
+      options(options_),
+      table(std::move(RKFScheme::make_ButcherArray(options.ButcherType)))
   {
     static_assert(is_any_v<ProblemType, RKFType::Scalar, RKFType::Vector>,
                   "Wrong problem type specified.");
@@ -62,34 +127,28 @@ public:
     function = function_;
   }
 
-  /// Set the Butcher array.
+  /// Set the options
   void
-  set_table(const ButcherType &table_)
+  set_function(const RKFOptions<ProblemType> &options_)
   {
-    table = table_;
+    options = options_;
   }
 
+  /* 
+   * NOT OK BECAUSE OF MOVING SEMANTIC
+  /// Set the Butcher array.
+  void
+  set_table(std::unique_ptr<ButcherArray> && table_)
+  {
+    table = std::move(table_);
+  }
+  */
+  
   /**
    * Solve problem.
-   *
-   * @param[in] t0               Initial time.
-   * @param[in] tf               Final time.
-   * @param[in] y0               Initial condition.
-   * @param[in] h0               Initial time step.
-   * @param[in] tol              Desired tolerance on error.
-   * @param[in] n_max_steps      Safeguard to avoid too many steps.
-   * @param[in] factor_reduction Multiplication factor for time step reduction.
-   * @param[in] factor_expansion Multiplication factor for time step expansion.
    */
   RKFResult<ProblemType>
-  operator()(const double &      t0,
-             const double &      tf,
-             const VariableType &y0,
-             const double &      h0,
-             const double &      tol,
-             const unsigned int  n_max_steps,
-             const double        factor_reduction = 0.95,
-             const double        factor_expansion = 2) const;
+  operator()() const;
 
 private:
   /**
@@ -104,28 +163,22 @@ private:
   auto
   RKFstep(const double &t, const VariableType &y, const double &h) const
     -> std::pair<VariableType, VariableType>;
-
-  ButcherType table;
+  
   Function    function;
+  RKFOptions<ProblemType> options;
+  std::unique_ptr<ButcherArray> table;
 };
 
 
-template <class ButcherType, class ProblemType>
+template <class ProblemType>
 RKFResult<ProblemType>
-RKF<ButcherType, ProblemType>::operator()(const double &      t0,
-                                          const double &      tf,
-                                          const VariableType &y0,
-                                          const double &      h0,
-                                          const double &      tol,
-                                          const unsigned int  n_max_steps,
-                                          const double        factor_reduction,
-                                          const double        factor_expansion
-
-) const
+RKF<ProblemType>::operator()() const
 {
   RKFResult<ProblemType> result;
 
   auto &[time, y, error_estimate, failed, expansions, reductions] = result;
+  const auto &[t0, tf, y0, h0, tol, n_max_steps, factor_reduction,
+	       factor_expansion, type] = options;
 
   error_estimate = 0.0;
   failed         = false;
@@ -226,21 +279,21 @@ RKF<ButcherType, ProblemType>::operator()(const double &      t0,
 }
 
 
-template <class ButcherType, class ProblemType>
+template <class ProblemType>
 auto
-RKF<ButcherType, ProblemType>::RKFstep(const double &      t,
+RKF<ProblemType>::RKFstep(const double &      t,
                                        const VariableType &y,
                                        const double &      h) const
   -> std::pair<VariableType, VariableType>
 {
-  constexpr auto n_stages = ButcherType::n_stages();
+  unsigned int n_stages = table->n_stages();
 
-  std::array<VariableType, n_stages> K;
+  std::vector<VariableType> K(n_stages);
 
-  const auto &A  = table.A;
-  const auto &b1 = table.b1;
-  const auto &b2 = table.b2;
-  const auto &c  = table.c;
+  const auto &A  = table->A;
+  const auto &b1 = table->b1;
+  const auto &b2 = table->b2;
+  const auto &c  = table->c;
 
   // The first step is always an Euler step.
   K[0] = function(t, y);
