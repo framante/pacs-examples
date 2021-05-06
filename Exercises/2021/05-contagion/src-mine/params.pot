@@ -57,7 +57,7 @@
   # Probability for one person to die of natural causes.
   death = 5e-7
 
-  # Probability for one person to die due to the desease.
+  # Probability for one person to die due to the disease.
   disease_death = 1e-3
   
   [../]
