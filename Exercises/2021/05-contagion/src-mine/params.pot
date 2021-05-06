@@ -58,6 +58,6 @@
   death = 0.05
 
   # Probability for one person to die while infected.
-  disease_death = 0.01
+  disease_death = 0.001
   
   [../]

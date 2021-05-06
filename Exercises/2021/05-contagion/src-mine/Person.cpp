@@ -164,6 +164,9 @@ Person::update_infection(container_type & people)
 	      person.second.state == State::Susceptible)
 	    person.second.state = State::Exposed;
 		      });
+     double probability = rand(engine);
+     if (probability < personparams.disease_death)
+       state = State::Dead;
     }
 }
 

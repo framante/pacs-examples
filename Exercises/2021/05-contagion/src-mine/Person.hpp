@@ -14,7 +14,8 @@ enum class State
    Exposed,
    Infected,
    Susceptible,
-   Recovered
+   Recovered,
+   Dead
   };
 
 enum class Move
@@ -59,6 +60,10 @@ public:
   inline bool is_exposed() const
   {
     return ( state == State::Exposed);
+  };
+  inline bool is_dead() const
+  {
+    return ( state == State::Dead);
   };
   
 private:

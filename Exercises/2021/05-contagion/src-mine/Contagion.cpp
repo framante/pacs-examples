@@ -40,17 +40,11 @@ void Contagion::simulate()
       if (step >= 1)
 	std::for_each(people.begin(), people.end(),
 		      [this](auto & p){
-
 			// update the position of people
 			p.second.move();
 			// update the infected state of people
 			p.second.update_infection(people);
-
-			/*
-                        bool dead = p.second.die();
-			if (dead)
-			  this->remove_person(p.first);
-			*/
+			
 		      });
       n_susceptible[step] = std::count_if(people.begin(), people.end(),
 					  [](const auto & p){
@@ -68,6 +62,10 @@ void Contagion::simulate()
 					  [](const auto & p){
 					    return p.second.is_exposed();
 					  });
+      n_dead[step] = std::count_if(people.begin(), people.end(),
+					  [](const auto & p){
+					    return p.second.is_dead();
+					  });
       /*
        bool born = people.begin()->second.give_birth();
        if (born)
@@ -75,14 +73,14 @@ void Contagion::simulate()
 	  this->add_person();
 	  std::cout << "born ";
 	}
-      */
-      
+            
       bool dead = people.begin()->second.die();
       if (dead)
 	{
 	  this->remove_person(people.begin()->first);
 	  n_dead[step] = (step == 0) ? 1 : 1 + n_dead[step-1];
 	}
+       */
     }
 }
 
@@ -138,12 +136,12 @@ Contagion::output_results() const
   std::cout << "Final susceptible: " << n_susceptible[contagionparams.n_timesteps] << std::endl;
   std::cout << "Initial infected: " << n_infected[0] << std::endl;
   std::cout << "Final infected: " << n_infected[contagionparams.n_timesteps] << std::endl;
-  std::cout << "Initial recovered: "<< n_recovered[0] << std::endl;
+  std::cout << "Initial recovered: " << n_recovered[0] << std::endl;
   std::cout << "Final recovered: " << n_recovered[contagionparams.n_timesteps] << std::endl;
   std::cout << "Initial exposed: "<< n_exposed[0] << std::endl;
   std::cout << "Final exposed: " << n_exposed[contagionparams.n_timesteps] << std::endl;
   std::cout << "Initial dead: "<< n_dead[0] << std::endl;
-  std::cout << "Final dead: " << std::accumulate(n_dead.begin(), n_dead.end(), 0) << std::endl;
+  std::cout << "Final dead: " << n_dead[contagionparams.n_timesteps] << std::endl;
   
   // Plot results.                                                                                                                                 
   Gnuplot gp;
