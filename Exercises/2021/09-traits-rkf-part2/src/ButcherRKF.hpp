@@ -45,6 +45,8 @@ public:
       for (auto const &v : A[i])
         c[i] += v;
   }
+  
+  virtual ~ButcherArray() = default;
 
   /**
    * Store the full array even if only the part below the main
