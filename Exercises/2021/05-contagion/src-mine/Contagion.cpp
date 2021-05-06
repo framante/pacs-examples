@@ -13,6 +13,7 @@ Contagion::Contagion(const std::string & filename):
   n_recovered(contagionparams.n_timesteps + 1, 0),
   n_susceptible(contagionparams.n_timesteps + 1, 0),
   n_exposed(contagionparams.n_timesteps + 1, 0),
+  n_dead(contagionparams.n_timesteps + 1, 0),
   time(contagionparams.n_timesteps + 1, 0.)
 {
   //people.reserve(contagionparams.n_people);
@@ -35,19 +36,6 @@ void Contagion::simulate()
     {
       time[step] = static_cast<double>(step) / \
 	contagionparams.n_timesteps_per_day;
-
-      bool born = people.begin()->second.give_birth();
-      bool dead = people.begin()->second.die();
-      if (born)
-	{
-	  this->add_person();
-	  std::cout << "born ";
-	}
-      if (dead)
-	{
-	  this->remove_person(people.begin()->first);
-	  std::cout << "dead ";
-	}
 
       if (step >= 1)
 	std::for_each(people.begin(), people.end(),
@@ -80,7 +68,21 @@ void Contagion::simulate()
 					  [](const auto & p){
 					    return p.second.is_exposed();
 					  });
+      /*
+       bool born = people.begin()->second.give_birth();
+       if (born)
+	{
+	  this->add_person();
+	  std::cout << "born ";
+	}
+      */
       
+      bool dead = people.begin()->second.die();
+      if (dead)
+	{
+	  this->remove_person(people.begin()->first);
+	  n_dead[step] = (step == 0) ? 1 : 1 + n_dead[step-1];
+	}
     }
 }
 
@@ -114,6 +116,7 @@ Contagion::output_results() const
        << std::setw(15) << std::left << "n_infected"
        << std::setw(15) << std::left << "n_recovered"
        << std::setw(15) << std::left << "n_exposed"
+       << std::setw(15) << std::left << "n_dead"
        << std::endl;
 
   for (unsigned int step = 0; step <= contagionparams.n_timesteps; \
@@ -124,6 +127,7 @@ Contagion::output_results() const
            << std::setw(15) << std::left << n_infected[step]
 	   << std::setw(15) << std::left << n_recovered[step]
 	   << std::setw(15) << std::left << n_exposed[step]
+	   << std::setw(15) << std::left << n_dead[step]
 	   << std::endl;
     }
   file.close();
@@ -138,6 +142,8 @@ Contagion::output_results() const
   std::cout << "Final recovered: " << n_recovered[contagionparams.n_timesteps] << std::endl;
   std::cout << "Initial exposed: "<< n_exposed[0] << std::endl;
   std::cout << "Final exposed: " << n_exposed[contagionparams.n_timesteps] << std::endl;
+  std::cout << "Initial dead: "<< n_dead[0] << std::endl;
+  std::cout << "Final dead: " << std::accumulate(n_dead.begin(), n_dead.end(), 0) << std::endl;
   
   // Plot results.                                                                                                                                 
   Gnuplot gp;
@@ -149,18 +155,8 @@ Contagion::output_results() const
      << gp.file1d(std::tie(time, n_exposed))
      << "with line linewidth 2 title 'Exposed',"
      << gp.file1d(std::tie(time, n_recovered))
-     << "with line linewidth 2 title 'Recovered'" << std::endl;
+     << "with line linewidth 2 title 'Recovered',"
+     << gp.file1d(std::tie(time, n_dead))
+     << "with line linewidth 2 title 'Dead'" << std::endl;
 }
 
-/*
-bool
-Contagion::mortality()
-{
-  
-}
-
-bool
-Contagion::natality()
-{
-}
-*/

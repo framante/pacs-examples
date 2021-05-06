@@ -25,6 +25,7 @@ private:
   std::vector<unsigned int> n_recovered;
   std::vector<unsigned int> n_susceptible;
   std::vector<unsigned int> n_exposed;
+  std::vector<unsigned int> n_dead;
   std::vector<double> time;
 };
 #endif /* CONTAGION_HPP */
