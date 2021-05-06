@@ -130,6 +130,12 @@ Person::move()
 void
 Person::update_infection(container_type & people)
 {
+  double natural_death = rand(engine);
+  if (natural_death < personparams.death)
+    {
+      state = State::Dead;
+      return;
+    }
   if (state == State::Infected)
     {
       t_infection += 1;
@@ -164,8 +170,8 @@ Person::update_infection(container_type & people)
 	      person.second.state == State::Susceptible)
 	    person.second.state = State::Exposed;
 		      });
-     double probability = rand(engine);
-     if (probability < personparams.disease_death)
+     double infection_death = rand(engine);
+     if (infection_death < personparams.disease_death)
        state = State::Dead;
     }
 }
