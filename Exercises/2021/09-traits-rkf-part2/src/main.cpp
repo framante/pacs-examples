@@ -58,11 +58,11 @@ main(int argc, char **argv)
 
     RKF<RKFType::Vector> solver(f, options);
 
-    /*
+    options.ButcherType = "RK23";   
     auto table =
     RKFScheme::make_ButcherArray(options.ButcherType);
     solver.set_table(table);
-    */
+   
     const auto solution = solver();
 
     std::cout << std::boolalpha;
