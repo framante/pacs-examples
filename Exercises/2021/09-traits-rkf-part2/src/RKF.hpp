@@ -137,15 +137,12 @@ public:
     options = options_;
   }
 
-  ///* 
-  // * NOT OK BECAUSE OF MOVING SEMANTIC
   /// Set the Butcher array.
   void
   set_table(std::unique_ptr<ButcherArray> & table_)
   {
     table = std::move(table_);
   }
-  //*/
   
   /**
    * Solve problem.

@@ -150,7 +150,7 @@ public:
 
   /// Set the Butcher array.
   void
-  set_table(const std::unique_ptr<ButcherArray> &table_)
+  set_table(std::unique_ptr<ButcherArray> &table_)
   {
     table = std::move(table_);
   }
