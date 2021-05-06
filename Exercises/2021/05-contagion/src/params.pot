@@ -28,7 +28,7 @@
   frac_sd = 0.75
 
   # People get infected when another infected gets closer than r_infection.
-  r_infection = 0.04
+  r_infection = 0.01
 
   [../]
 
