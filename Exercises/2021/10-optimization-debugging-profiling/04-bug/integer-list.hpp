@@ -121,7 +121,6 @@ public:
     previous->setNext(next);
     next->setPrevious(previous);
     next = nullptr;
-    previous = nullptr;
     delete this;
   }
 
