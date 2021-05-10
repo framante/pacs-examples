@@ -82,7 +82,7 @@ public:
     int   ret = 1;
     while (!t->isLast())
       {
-        t = t->next;
+        t = t->getNext();
         ret++;
       }
     return ret;
@@ -94,7 +94,7 @@ public:
   {
     Node *t = this;
     while (!t->isLast())
-      t = t->next;
+      t = t->getNext();
 
     t->setNext(theNext);
     theNext->setPrevious(t);
@@ -107,7 +107,7 @@ public:
   {
     Node *t = this;
     while (!t->isLast())
-      t = t->next;
+      t = t->getNext();
 
     Node *theNewNode = new Node(a);
     t->setNext(theNewNode);
@@ -121,7 +121,6 @@ public:
     previous->setNext(next);
     next->setPrevious(previous);
     next = nullptr;
-    previous = nullptr;
     delete this;
   }
 
@@ -131,7 +130,6 @@ public:
   {
     previous->setNext(replacement);
     next->setPrevious(replacement);
-
     replacement->setNext(next);
     replacement->setPrevious(previous);
     next = nullptr;
@@ -149,7 +147,7 @@ public:
     Node *t = this;
     while (!t->isLast())
       {
-        t = t->next;
+        t = t->getNext();
         if (t->getData() == value)
           return t;
       }
@@ -165,7 +163,7 @@ public:
     while (!t->isLast())
       {
         std::cout << t->getData() << ", ";
-        t = t->next;
+        t = t->getNext();
       }
     std::cout << t->getData() << std::endl;
   }
