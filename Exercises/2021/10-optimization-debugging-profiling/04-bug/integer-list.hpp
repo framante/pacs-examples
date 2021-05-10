@@ -82,7 +82,7 @@ public:
     int   ret = 1;
     while (!t->isLast())
       {
-        t = next;
+        t = t->next;
         ret++;
       }
     return ret;
@@ -94,7 +94,7 @@ public:
   {
     Node *t = this;
     while (!t->isLast())
-      t = next;
+      t = t->next;
 
     t->setNext(theNext);
     theNext->setPrevious(t);
@@ -107,7 +107,7 @@ public:
   {
     Node *t = this;
     while (!t->isLast())
-      t = next;
+      t = t->next;
 
     Node *theNewNode = new Node(a);
     t->setNext(theNewNode);
@@ -120,6 +120,9 @@ public:
   {
     previous->setNext(next);
     next->setPrevious(previous);
+    next = nullptr;
+    previous = nullptr;
+    delete this;
   }
 
   // replace this node with a given node
@@ -128,6 +131,11 @@ public:
   {
     previous->setNext(replacement);
     next->setPrevious(replacement);
+
+    replacement->setNext(next);
+    replacement->setPrevious(previous);
+    next = nullptr;
+    delete this;
   }
 
   // find first node with a specified value in sublist starting from
@@ -141,7 +149,7 @@ public:
     Node *t = this;
     while (!t->isLast())
       {
-        t = next;
+        t = t->next;
         if (t->getData() == value)
           return t;
       }
@@ -156,10 +164,10 @@ public:
     Node *t = this;
     while (!t->isLast())
       {
-        std::cout << t.getData() << ", ";
-        t = next;
+        std::cout << t->getData() << ", ";
+        t = t->next;
       }
-    std::cout << t.getData() << std::endl;
+    std::cout << t->getData() << std::endl;
   }
 
 protected:

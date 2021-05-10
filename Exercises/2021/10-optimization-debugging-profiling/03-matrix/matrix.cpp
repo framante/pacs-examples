@@ -3,15 +3,52 @@
 #include <algorithm>
 #include <cassert>
 
+#include <Eigen/Dense>
 matrix
 matrix::transpose() const
 {
-  return matrix(0);
+  matrix result(this->get_cols(), this->get_rows());
+
+  /*
+   * standard implementation
+  for(std::size_t i = 0; i < result.get_rows(); ++i)
+    for(std::size_t j = 0; j < result.get_cols(); ++j)
+      result(i, j) = this->operator()(j, i);
+  */
+
+  Eigen::Map<Eigen::MatrixXd> result_eigen(result.get_data(),
+					   result.get_rows(),
+					   result.get_cols());
+  result_eigen.transpose();
+  
+  return result;
 }
 
 matrix operator*(const matrix &A, const matrix &B)
 {
-  return matrix(0);
+  matrix result(A.get_rows(), B.get_cols());
+
+  /*
+   * standard implementation
+  matrix A_t = A.transpose();
+  
+  for(std::size_t i = 0; i < result.get_rows(); ++i)
+    for(std::size_t j = 0; j < result.get_cols(); ++j)
+      for(std::size_t k = 0; k < A.get_cols(); ++k)
+	result(i, j) += A_t(k, i) * B(k, j);
+  */
+
+  Eigen::Map<const Eigen::MatrixXd> A_eigen(A.get_data(),
+					    A.get_rows(),
+					    A.get_cols());
+  Eigen::Map<const Eigen::MatrixXd> B_eigen(B.get_data(),
+					    B.get_rows(),
+					    B.get_cols());
+  Eigen::Map<Eigen::MatrixXd> result_eigen(result.get_data(),
+					   result.get_rows(),
+					   result.get_cols());
+  result_eigen = A_eigen * B_eigen;
+  return result;  
 }
 
 void

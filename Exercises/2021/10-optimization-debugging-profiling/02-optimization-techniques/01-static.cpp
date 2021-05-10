@@ -10,7 +10,9 @@ int
 lookup(const size_t &index)
 {
   // Generate an arbitrary dataset.
-  auto data = std::vector<int>(vec_size);
+  static auto data = std::vector<int>(vec_size);
+  // if you declare it static it's not allocated everytime
+  // you call the function, but it's done once for all
   std::iota(data.begin(), data.end(), 0);
 
   return data[index];

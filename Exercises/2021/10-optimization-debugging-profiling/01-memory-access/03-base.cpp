@@ -53,6 +53,18 @@ compute(const std::vector<int> &data)
   return sum / data.size();
 }
 
+long int
+compute2(const std::vector<int *> &pointers)
+{
+  long int sum = 0;
+
+  // Square each value.
+  for (int * d : pointers)
+    sum += (*d) * (*d);
+
+  return sum / pointers.size();
+}
+
 int
 main(int argc, char **argv)
 {
@@ -63,7 +75,10 @@ main(int argc, char **argv)
 
   // Our test data set.
   auto data = std::vector<int>(ints_in_cache * 10);
-  
+  auto pointers = std::vector<int *>(ints_in_cache * 10);
+  for(std::size_t i = 0; i < pointers.size(); ++i)
+    pointers[i] = &(data[i]);
+
   // Seed the RNG with actual hardware/OS randomness from random_device.
   std::default_random_engine engine(std::random_device{}());
 
@@ -82,10 +97,11 @@ main(int argc, char **argv)
   for (unsigned int i = 0; i < iterations; ++i)
     {
       populate_dataset(data, randi);
+      std::random_shuffle(data.begin(), data.end());
       clear_cache();
 
       const auto start  = timer::now();
-      const int  result = compute(data);
+      const int  result = compute2(pointers);
       const auto end    = timer::now();
 
       time_total += (end - start);

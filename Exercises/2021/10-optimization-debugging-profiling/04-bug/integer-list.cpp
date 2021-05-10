@@ -14,6 +14,7 @@ main(int argc, char **argv)
   while (c < 10)
     {
       c++;
+      std::cout << c << std::endl;
       start.appendNew(c);
     }
 

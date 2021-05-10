@@ -2,7 +2,7 @@ CXX      ?= g++
 CXXFLAGS ?= -std=c++17
 CPPFLAGS ?= -O3 -Wall
 
-EXEC     = 01-base
+EXEC     = 01-base 02-base 03-base
 LDFLAGS ?=
 LIBS    ?=
 
@@ -11,7 +11,7 @@ all: $(EXEC)
 %.o: %.cpp
 	$(CXX) -c $(CPPFLAGS) $(CXXFLAGS) $<
 
-$(EXEC): %: %.o 
+$(EXEC): %: %.o
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $< $(LIBS) -o $@
 
 clean:

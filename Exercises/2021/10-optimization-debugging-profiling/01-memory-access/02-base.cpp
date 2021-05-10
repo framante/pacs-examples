@@ -52,6 +52,27 @@ compute(const std::vector<int> &data)
 
   return sum / data.size();
 }
+// data[0] --> sum += data[0] * data[0];
+// data [0] is copied from RAM to L3cache
+// as well as data[1], data[2], .. (how many
+// depends on your computer L3 cache size)
+
+long int
+compute2(const std::vector<int *> &pointers)
+{
+  long int sum = 0;
+
+  // Square each value.
+  for (int * d : pointers)
+    sum += (*d) * (*d);
+
+  return sum / pointers.size();
+}
+// &data[0], data[0] are copied from RAM to L3 cache
+// as well as &data[1], data[1], &data[2], data[2], ...
+// then now the access to the next data is dragged by
+// the presence of &data[i] which is not useful, so it
+// has to jump over one every two!
 
 int
 main(int argc, char **argv)
@@ -63,7 +84,10 @@ main(int argc, char **argv)
 
   // Our test data set.
   auto data = std::vector<int>(ints_in_cache * 10);
-  
+  auto pointers = std::vector<int *>(ints_in_cache * 10);
+  for(std::size_t i = 0; i < pointers.size(); ++i)
+    pointers[i] = &(data[i]);
+
   // Seed the RNG with actual hardware/OS randomness from random_device.
   std::default_random_engine engine(std::random_device{}());
 
@@ -85,7 +109,7 @@ main(int argc, char **argv)
       clear_cache();
 
       const auto start  = timer::now();
-      const int  result = compute(data);
+      const int  result = compute2(pointers);
       const auto end    = timer::now();
 
       time_total += (end - start);
