@@ -131,7 +131,7 @@ void
 Person::update_infection(container_type & people)
 {
   double natural_death = rand(engine);
-  if (natural_death < personparams.death)
+  if (natural_death < personparams.death || state == State::Dead)
     {
       state = State::Dead;
       return;
@@ -155,9 +155,9 @@ Person::update_infection(container_type & people)
      std::for_each(people.begin(), people.end(),
 		      [this](auto & person){
           // compute distance
-	  const double x_distance = x - person.second.x;
-	  const double y_distance = y - person.second.y;
-	  const double z_distance = z - person.second.z;
+	  const double x_distance = x - person.x;
+	  const double y_distance = y - person.y;
+	  const double z_distance = z - person.z;
 	  const double distance = std::sqrt(x_distance * x_distance +
 					    y_distance * y_distance +
 					    z_distance * z_distance);
@@ -167,8 +167,8 @@ Person::update_infection(container_type & people)
 
 	  // if "other is too close and has not previously recovered
 	  if (distance < contagionparams.r_infection &&
-	      person.second.state == State::Susceptible)
-	    person.second.state = State::Exposed;
+	      person.state == State::Susceptible)
+	    person.state = State::Exposed;
 		      });
      double infection_death = rand(engine);
      if (infection_death < personparams.disease_death)

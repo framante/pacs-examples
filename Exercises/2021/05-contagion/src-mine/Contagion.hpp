@@ -13,7 +13,7 @@ public:
 private:
   static unsigned n_people;
   void add_person();
-  void remove_person(container_type::key_type key);
+  void remove_person(container_type::size_type key);
   void output_results() const;
   void simulate();
   

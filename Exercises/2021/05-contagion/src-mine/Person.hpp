@@ -7,7 +7,7 @@
 #include <map>
 
 class Person;
-typedef std::map<unsigned, Person> container_type;
+typedef std::vector<Person> container_type;
 
 enum class State
   {
