@@ -82,12 +82,6 @@ void Contagion::simulate()
 					    return p.is_dead();
 					  });
       /*
-       bool born = people.begin()->second.give_birth();
-       if (born)
-	{
-	  this->add_person();
-	  std::cout << "born ";
-	}
             
       bool dead = people.begin()->second.die();
       if (dead)
