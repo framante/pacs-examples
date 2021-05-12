@@ -52,15 +52,6 @@ void Contagion::simulate()
 			  ++new_borns;
 		      });
 
-      people.reserve(people.size() + new_borns);
-      for(unsigned i = 0; i < new_borns; ++i)
-	{
-	  people.emplace_back(file_name, State::Susceptible);
-	  ++n_people;
-	  std::cout << "at time step " << step << " " << new_borns
-		    << " people were born" << std::endl;
-	}
-      
       n_susceptible[step] = std::count_if(people.begin(), people.end(),
 					  [](const auto & p){
 					    return p.is_susceptible();
@@ -81,15 +72,23 @@ void Contagion::simulate()
 					  [](const auto & p){
 					    return p.is_dead();
 					  });
-      /*
-            
-      bool dead = people.begin()->second.die();
-      if (dead)
+
+      people.reserve(people.size() + new_borns);
+      for(unsigned i = 0; i < new_borns; ++i)
 	{
-	  this->remove_person(people.begin()->first);
-	  n_dead[step] = (step == 0) ? 1 : 1 + n_dead[step-1];
+	  people.emplace_back(file_name, State::Susceptible);
+	  ++n_people;
+	  std::cout << "at time step " << step << " " << new_borns
+		    << " people were born" << std::endl;
 	}
-       */
+
+       people.erase(std::remove_if(people.begin(), people.end(),
+		     [](auto & p){
+		       return p.is_dead();
+		     }), people.end());
+      if (step >= 1)
+	n_dead[step] += n_dead[step-1];
+
     }
 }
 
