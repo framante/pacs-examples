@@ -1,13 +1,13 @@
 [domain]
   # Domain is [0, domain_size] x [0, domain_size] x [0, domain_size].
-  domain_size = 1
+  domain_size = 2
 
   # Pub size and location.
-  pub_size = 0.1
+  pub_size = 0.3
 
-  pub_x = 0.5
-  pub_y = 0.5
-  pub_z = 0.5
+  pub_x = 1
+  pub_y = 1
+  pub_z = 1
   [../]
 
 [contagion]
