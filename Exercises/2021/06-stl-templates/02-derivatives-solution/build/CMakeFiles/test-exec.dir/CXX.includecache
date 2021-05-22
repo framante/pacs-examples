@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/Derivatives.hpp
+functional
+-
+type_traits
+-
+
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/main.cpp
+Derivatives.hpp
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/Derivatives.hpp
+cmath
+-
+functional
+-
+iostream
+-
+

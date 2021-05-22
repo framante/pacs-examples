@@ -1,0 +1,3 @@
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/build/CMakeFiles/rebuild_cache.dir
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/build/CMakeFiles/test-exec.dir
+/home/fmante/pacs-examples/Exercises/2021/06-stl-templates/02-derivatives-solution/build/CMakeFiles/edit_cache.dir
